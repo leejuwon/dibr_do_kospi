@@ -66,6 +66,13 @@ flutter:
     - images/exc.png
     - images/backg1.png
     - images/backgr2.jpg
+    - images/main_bg.jpg
+    - images/main_bg2.jpg
+    - images/main_bg_3.jpg
+    - images/main_bg_4.jpg
+    - images/etf_bg.jpg
+    - images/etf_bg_1.jpg
+    - images/etf_bg_2.jpg
     - images/bg1.png
     - images/bg2.png
     - images/bg3.png
@@ -93,6 +100,8 @@ flutter:
     - images/exc2_logo.png
     - images/leverage_logo.png
     - images/inverse_logo.png
+    - images/leverage_logo_2.png
+    - images/inverse_logo_2.png
     - google_fonts/
 
 

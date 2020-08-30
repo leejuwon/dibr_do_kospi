@@ -2,9 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:firebase_admob/firebase_admob.dart';
 import "package:flutter_dibr_do_kospi/ad_manager.dart";
 import "package:flutter_dibr_do_kospi/screen/result_screen.dart";
+import "package:flutter_dibr_do_kospi/screen/etfStockInfo_screen.dart";
 import "package:flutter_dibr_do_kospi/main.dart";
 import "package:flutter_dibr_do_kospi/model/model_market.dart";
-import "package:flutter_dibr_do_kospi/model/model_etfStock.dart";
 import 'package:flutter/services.dart';
 import 'package:intl/intl.dart';
 import 'package:http/http.dart' as http;
@@ -18,60 +18,11 @@ class DibrHistoryPage extends StatefulWidget {
 
 class _DibrHistoryPageState extends State<DibrHistoryPage> {
   Future<MarketInfo> futureHistMarketInfo;
-  Future<List<EtfStockInfo>> futureHistEtfStockInfo;
-
-  EtfItem selectedEtf;
-  List<EtfItem> etfStocks = <EtfItem>[
-    const EtfItem(
-        'KDX',
-        'KODEX',
-        Icon(
-          Icons.check_circle_outline,
-          color: Colors.redAccent,
-        )),
-    const EtfItem(
-        'TGR',
-        'TIGER',
-        Icon(
-          Icons.check_circle_outline,
-          color: Colors.deepOrangeAccent,
-        )),
-    const EtfItem(
-        'KSF',
-        'KOSEF',
-        Icon(
-          Icons.check_circle_outline,
-          color: Colors.yellowAccent,
-        )),
-    const EtfItem(
-        'KBS',
-        'KBSTAR',
-        Icon(
-          Icons.check_circle_outline,
-          color: Colors.greenAccent,
-        )),
-    const EtfItem(
-        'ARR',
-        'ARRIRANG',
-        Icon(
-          Icons.check_circle_outline,
-          color: Colors.blueAccent,
-        )),
-    const EtfItem(
-        'KSP',
-        'KOSPI',
-        Icon(
-          Icons.check_circle_outline,
-          color: Colors.indigoAccent,
-        )),
-  ];
 
   //DateTime now = DateTime.now();
 
   String _selectedDt = new DateFormat("yyyy-MM-dd").format(new DateTime(
       DateTime.now().year, DateTime.now().month, DateTime.now().day - 1));
-
-  String _selectedEtf;
 
   //String _selectedDt = new DateFormat("yyyy-MM-dd").format(DateTime.now());
 
@@ -86,7 +37,6 @@ class _DibrHistoryPageState extends State<DibrHistoryPage> {
 
     // TODO: Load a Rewarded Ad
     futureHistMarketInfo = fetchMarketHistInfo('Init');
-    futureHistEtfStockInfo = fetchEtfInfo('Init');
   }
 
   // TODO: Implement _onRewardedAdEvent()
@@ -118,44 +68,6 @@ class _DibrHistoryPageState extends State<DibrHistoryPage> {
         print('@@@@@rewarded!!!!');
         setState(() {
           futureHistMarketInfo = fetchMarketHistInfo('Hist');
-        });
-        break;
-      default:
-      // do nothing
-    }
-  }
-
-  // TODO: Implement _onRewardedAdEvent()
-  void _onHistEtfRewardedAdEvent(RewardedVideoAdEvent event,
-      {String rewardType, int rewardAmount}) {
-    print('*****************HistEtfRewardedAdEvent rewarded!!!!');
-    print(event);
-    switch (event) {
-      case RewardedVideoAdEvent.loaded:
-        setState(() {
-          _isHistRewardedAdReady = true;
-        });
-        break;
-      case RewardedVideoAdEvent.closed:
-        setState(() {
-          _isHistRewardedAdReady = false;
-        });
-        RewardedVideoAd.instance.load(
-          targetingInfo: MobileAdTargetingInfo(),
-          adUnitId: AdManager.rewardedAdUnitId,
-        );
-        break;
-      case RewardedVideoAdEvent.failedToLoad:
-        setState(() {
-          _isHistRewardedAdReady = true;
-          futureHistEtfStockInfo = fetchEtfInfo('Hist');
-        });
-        print('Failed to load a rewarded ad');
-        break;
-      case RewardedVideoAdEvent.rewarded:
-        print('@@@@@rewarded!!!!');
-        setState(() {
-          futureHistEtfStockInfo = fetchEtfInfo('Hist');
         });
         break;
       default:
@@ -234,20 +146,6 @@ class _DibrHistoryPageState extends State<DibrHistoryPage> {
     }
   }
 
-  Image getImage(pType) {
-    if (pType == null || pType == 'undefined') {
-      pType = 'KDX_LVG';
-    }
-
-    if (pType == 'KDX_LVG') {
-      return Image.asset('images/leverage_logo.png', height: 70, width: 70);
-    } else if (pType == 'KDX_I2X') {
-      return Image.asset('images/inverse_logo.png', height: 70, width: 70);
-    } else {
-      return Image.asset('images/leverage_logo.png', height: 70, width: 70);
-    }
-  }
-
   Future<MarketInfo> fetchMarketHistInfo(pType) async {
     print('fetchMarketHistInfo!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!pType: ' +
         pType);
@@ -276,70 +174,6 @@ class _DibrHistoryPageState extends State<DibrHistoryPage> {
     }
   }
 
-  Future<List<EtfStockInfo>> fetchEtfInfo(pType) async {
-    List<EtfStockInfo> rtnEtfStocks = [];
-
-    print('@@@@@@@@@@@@@@@@@@@@fetchEtfInfo실행!!!??:' + pType);
-    if (pType == 'Init') {
-      print('pType:' + pType);
-      //return EtfStockInfo.fromInitJson();
-      rtnEtfStocks.add(EtfStockInfo.fromInitJson());
-      rtnEtfStocks.add(EtfStockInfo.fromInitJson());
-      return rtnEtfStocks;
-    } else {
-      rtnEtfStocks = [];
-      print('@@@@@@@@@@@@@@@@@@@@로드?? ${_selectedDt}  ${_selectedEtf}');
-      final response = await http.get(Uri.encodeFull(
-          'http://dibr.cafe24app.com/marketInfo/getSelectedEtfInfo/${_selectedDt}/${_selectedEtf}'));
-      //headers: {"Accept": "application/json"});
-      print("상태####################################???????????");
-      print(jsonDecode(response.body));
-      print("상태####################################");
-      print(response.statusCode);
-      if (response.statusCode == 200) {
-        List dataList = jsonDecode(response.body);
-        var dataLength = dataList.length;
-        Map dataJson;
-        var dataStock;
-        print("개수####################################");
-        print(dataLength);
-        if (dataLength == 2) {
-          for (var etfStock in dataList) {
-            //etfStocks.add(etfStock);
-            //dataJson = etfStock;
-            dataStock = EtfStockInfo.fromJson(etfStock);
-            print("1####################################");
-            print(dataStock);
-            print(etfStock);
-            print("2####################################");
-            rtnEtfStocks.add(dataStock);
-          }
-        } else if (dataLength == 1) {
-          dataJson = dataList[0];
-          dataStock = EtfStockInfo.fromJson(dataJson);
-          rtnEtfStocks.add(dataStock);
-          rtnEtfStocks.add(EtfStockInfo.fromInitJson());
-        } else if (dataLength == 0) {
-          rtnEtfStocks.add(EtfStockInfo.fromInitJson());
-          rtnEtfStocks.add(EtfStockInfo.fromInitJson());
-        } else {
-          rtnEtfStocks.add(EtfStockInfo.fromInitJson());
-          rtnEtfStocks.add(EtfStockInfo.fromInitJson());
-        }
-
-        print("199####################################");
-        print(rtnEtfStocks);
-        print(rtnEtfStocks[0].etfStockId);
-        print(rtnEtfStocks[1].etfStockId);
-        print("299####################################");
-        //var marketInfo = ;
-        return rtnEtfStocks;
-      } else {
-        throw Exception('Failed to load MarketInfo');
-      }
-    }
-  }
-
   @override
   Widget build(BuildContext context) {
     double iconSize = 20;
@@ -356,7 +190,7 @@ class _DibrHistoryPageState extends State<DibrHistoryPage> {
               ),
               Column(
                 children: <Widget>[
-                  SizedBox(height: 20),
+                  SizedBox(height: 80),
                   Row(mainAxisAlignment: MainAxisAlignment.center, children: <
                       Widget>[
                     Container(
@@ -500,6 +334,7 @@ class _DibrHistoryPageState extends State<DibrHistoryPage> {
               stream: futureHistMarketInfo.asStream(),
 
               builder: (BuildContext context, snapshot) {
+                final marketInfo = snapshot.data;
                 print('snapshot~~~~~~~~~~~~~~~~~~~~~~~~~~~');
                 print(snapshot);
                 if (snapshot.hasData) {
@@ -522,7 +357,7 @@ class _DibrHistoryPageState extends State<DibrHistoryPage> {
                                   Container(
                                     padding: EdgeInsets.fromLTRB(2, 2, 2, 0),
                                     height: 130,
-                                    width: 190,
+                                    width: 195,
                                     child: Card(
                                       elevation: 5,
                                       child: Padding(
@@ -548,7 +383,7 @@ class _DibrHistoryPageState extends State<DibrHistoryPage> {
                                                           child: Image.asset(
                                                               'images/usa.png',
                                                               height: 70,
-                                                              width: 70),
+                                                              width: 60),
                                                         ),
                                                       ),
                                                       Column(
@@ -715,7 +550,7 @@ class _DibrHistoryPageState extends State<DibrHistoryPage> {
                                   Container(
                                     padding: EdgeInsets.fromLTRB(2, 2, 2, 0),
                                     height: 130,
-                                    width: 190,
+                                    width: 195,
                                     child: Card(
                                       elevation: 5,
                                       child: Padding(
@@ -741,7 +576,7 @@ class _DibrHistoryPageState extends State<DibrHistoryPage> {
                                                           child: Image.asset(
                                                               'images/euro.png',
                                                               height: 70,
-                                                              width: 70),
+                                                              width: 60),
                                                         ),
                                                       ),
                                                       Column(
@@ -911,7 +746,7 @@ class _DibrHistoryPageState extends State<DibrHistoryPage> {
                                   Container(
                                     padding: EdgeInsets.fromLTRB(2, 2, 2, 0),
                                     height: 130,
-                                    width: 190,
+                                    width: 195,
                                     child: Card(
                                       elevation: 5,
                                       child: Padding(
@@ -937,7 +772,7 @@ class _DibrHistoryPageState extends State<DibrHistoryPage> {
                                                           child: Image.asset(
                                                               'images/oil_logo.png',
                                                               height: 70,
-                                                              width: 70),
+                                                              width: 60),
                                                         ),
                                                       ),
                                                       Column(
@@ -1103,7 +938,7 @@ class _DibrHistoryPageState extends State<DibrHistoryPage> {
                                   Container(
                                     padding: EdgeInsets.fromLTRB(2, 2, 2, 0),
                                     height: 130,
-                                    width: 190,
+                                    width: 195,
                                     child: Card(
                                       elevation: 5,
                                       child: Padding(
@@ -1129,7 +964,7 @@ class _DibrHistoryPageState extends State<DibrHistoryPage> {
                                                           child: Image.asset(
                                                               'images/oil_logo.png',
                                                               height: 70,
-                                                              width: 70),
+                                                              width: 60),
                                                         ),
                                                       ),
                                                       Column(
@@ -1299,7 +1134,7 @@ class _DibrHistoryPageState extends State<DibrHistoryPage> {
                                   Container(
                                     padding: EdgeInsets.fromLTRB(2, 2, 2, 0),
                                     height: 130,
-                                    width: 190,
+                                    width: 195,
                                     child: Card(
                                       elevation: 5,
                                       child: Padding(
@@ -1325,7 +1160,7 @@ class _DibrHistoryPageState extends State<DibrHistoryPage> {
                                                           child: Image.asset(
                                                               'images/oil_logo.png',
                                                               height: 70,
-                                                              width: 70),
+                                                              width: 60),
                                                         ),
                                                       ),
                                                       Column(
@@ -1491,7 +1326,7 @@ class _DibrHistoryPageState extends State<DibrHistoryPage> {
                                   Container(
                                     padding: EdgeInsets.fromLTRB(2, 2, 2, 0),
                                     height: 130,
-                                    width: 190,
+                                    width: 195,
                                     child: Card(
                                       elevation: 5,
                                       child: Padding(
@@ -1517,7 +1352,7 @@ class _DibrHistoryPageState extends State<DibrHistoryPage> {
                                                           child: Image.asset(
                                                               'images/excnew_logo.png',
                                                               height: 70,
-                                                              width: 70),
+                                                              width: 60),
                                                         ),
                                                       ),
                                                       Column(
@@ -2034,7 +1869,60 @@ class _DibrHistoryPageState extends State<DibrHistoryPage> {
                                   color: Colors.red,
                                   letterSpacing: 2.0,
                                 ))),
-                        SizedBox(height: 10),
+                        SizedBox(height: 50,),
+                        SizedBox(
+                          height: 60,
+                          child: Padding(
+                            padding: const EdgeInsets.only(left: 10.0,right: 10.0),
+                            child: RaisedButton(
+                              child: Row(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: <Widget>[
+                                  Icon(
+                                    Icons.redo,
+                                    size: 40.0,
+                                    color: Colors.white,
+                                  ),
+                                  Text("ETF 종목 정보 조회",
+                                      style: TextStyle(
+                                          fontSize: 24, color: Colors.white)),
+                                ],
+                              ),
+                              color: Colors.lightBlueAccent,
+                              shape: RoundedRectangleBorder(
+                                  borderRadius:
+                                  new BorderRadius.circular(20.0)),
+                              onPressed: () {
+                                var openStandardData = snapshot.data.kspOpenPrice;
+                                if(openStandardData == 'undefined' || openStandardData == null || openStandardData == 0.0){
+                                  showDialog(
+                                  context: context,
+                                  builder: (context) {
+                                    return AlertDialog(
+                                      title: Text('[Info]'),
+                                      content: Text(
+                                          '시장 정보 조회를 하셔야합니다!'),
+                                      actions: <Widget>[
+                                        FlatButton(
+                                          child: Text('ok'.toUpperCase()),
+                                          onPressed: () {
+                                            Navigator.pop(context);
+                                          },
+                                        ),
+                                      ],
+                                    );
+                                  });
+                                }else{
+                                  Navigator.of(context).push(MaterialPageRoute<Null>(
+                                      fullscreenDialog: true,
+                                      builder: (BuildContext context){
+                                        return DibrEtfStockInfoPage(marketInfo: marketInfo);
+                                      }
+                                  ));
+                                }
+                              },
+                            ),)),
+                        SizedBox(height: 300),
                       ],
                     ),
                   );
@@ -2046,555 +1934,7 @@ class _DibrHistoryPageState extends State<DibrHistoryPage> {
 
                 return CircularProgressIndicator();
               }),
-          Container(
-            margin: EdgeInsets.all(10),
-            child: StreamBuilder(
-                stream: futureHistEtfStockInfo.asStream(),
-                builder: (BuildContext context, snapshot) {
-                  print('snapshot~~~~~~~~~~~~~~~~~~~~~~~~~~~');
-                  print(snapshot);
-                  if (snapshot.hasData) {
-                    final etfDb = snapshot.data;
-                    print('~~~~~etfDb~~~~~');
-                    print(snapshot.data.length);
-                    for (var item in etfDb) {
-                      print(item.etfStockName);
-                      print(item.etfStockDate);
-                      print(item.etfBefClosePrice);
-                    }
 
-                    List<Card> etfStockCardList = [];
-
-                    /*for( var etfStock in etfDb){
-
-	//etfStockCardList.add(etfStock);
-  }*/
-                    return Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: <Widget>[
-                        SizedBox(height: 10),
-                        Container(
-                          child: Image.asset(
-                            'images/pic_g.png',
-                            fit: BoxFit.fill,
-                          ),
-                        ),
-                        Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                            children: [
-                              DropdownButton<EtfItem>(
-                                hint: Text("ETF 종목을 선택해주세요."),
-                                value: selectedEtf,
-                                onChanged: (EtfItem Value) {
-                                  setState(() {
-                                    selectedEtf = Value;
-                                    _selectedEtf = Value.id;
-                                  });
-                                },
-                                items: etfStocks.map((EtfItem user) {
-                                  return DropdownMenuItem<EtfItem>(
-                                    value: user,
-                                    child: Row(
-                                      children: <Widget>[
-                                        user.icon,
-                                        SizedBox(
-                                          width: 10,
-                                        ),
-                                        Text(
-                                          user.name,
-                                          style: TextStyle(color: Colors.black),
-                                        ),
-                                      ],
-                                    ),
-                                  );
-                                }).toList(),
-                              ),
-                              FlatButton(
-                                color: Colors.blue,
-                                textColor: Colors.white,
-                                disabledColor: Colors.grey,
-                                disabledTextColor: Colors.black,
-                                padding: EdgeInsets.all(8.0),
-                                splashColor: Colors.blueAccent,
-                                shape: RoundedRectangleBorder(
-                                    borderRadius:
-                                        new BorderRadius.circular(30.0)),
-                                onPressed: () {
-                                  print(exRtScore.abs());
-                                  showDialog(
-                                    context: context,
-                                    builder: (context) {
-                                      return AlertDialog(
-                                        title: Text('Need a StockInfo?'),
-                                        content: Text(
-                                            'Watch an Ad to get a information!'),
-                                        actions: <Widget>[
-                                          FlatButton(
-                                            child: Text('cancel'.toUpperCase()),
-                                            onPressed: () {
-                                              Navigator.pop(context);
-                                            },
-                                          ),
-                                          FlatButton(
-                                            child: Text('ok'.toUpperCase()),
-                                            onPressed: () {
-                                              RewardedVideoAd
-                                                      .instance.listener =
-                                                  _onHistEtfRewardedAdEvent;
-                                              Navigator.pop(context);
-                                              RewardedVideoAd.instance.show();
-                                              //RestApi_Get();
-                                            },
-                                          ),
-                                        ],
-                                      );
-                                    },
-                                  );
-                                },
-                                child: Row(
-                                  children: <Widget>[
-                                    Icon(
-                                      Icons.movie,
-                                      size: 25,
-                                    ),
-                                    Text(
-                                      "(Ad)ETF 정보 조회",
-                                      style: TextStyle(fontSize: 14.0),
-                                    ),
-                                  ],
-                                ),
-                              )
-                            ]),
-                        SizedBox(height: 10),
-                        Stack(
-                          children: <Widget>[
-                            Container(
-                              color: Colors.blue,
-                              height: 41,
-                              width: 236,
-                            ),
-                            Row(
-                                mainAxisAlignment: MainAxisAlignment.start,
-                                children: [
-                                  Text(' ',
-                                      style: TextStyle(
-                                        fontWeight: FontWeight.bold,
-                                        fontSize: 26,
-                                        fontStyle: FontStyle.normal,
-                                        backgroundColor: Colors.orange,
-                                        letterSpacing: 2.0,
-                                      )),
-                                  Text('    ETF 투자 결과    ',
-                                      style: TextStyle(
-                                          fontWeight: FontWeight.bold,
-                                          fontSize: 20,
-                                          fontStyle: FontStyle.normal,
-                                          letterSpacing: 2.0,
-                                          color: Colors.white)),
-                                ]),
-                          ],
-                        ),
-                        SizedBox(height: 10),
-                        Container(
-                          margin: EdgeInsets.all(2),
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: <Widget>[
-                              Container(
-                                padding: EdgeInsets.fromLTRB(2, 2, 2, 0),
-                                height: 120,
-                                width: 190,
-                                child: Card(
-                                  elevation: 5,
-                                  child: Padding(
-                                      padding: EdgeInsets.all(2),
-                                      child: Padding(
-                                          padding: const EdgeInsets.only(
-                                              left: 3, top: 5),
-                                          child: Column(
-                                            children: <Widget>[
-                                              Row(
-                                                mainAxisAlignment:
-                                                    MainAxisAlignment.start,
-                                                children: <Widget>[
-                                                  Padding(
-                                                    padding:
-                                                        const EdgeInsets.only(
-                                                            left: 3.0,
-                                                            right: 3.0),
-                                                    child: Align(
-                                                      alignment:
-                                                          Alignment.centerLeft,
-                                                      child: getImage(snapshot
-                                                          .data[0].etfStockId),
-                                                    ),
-                                                  ),
-                                                  Column(
-                                                      crossAxisAlignment:
-                                                          CrossAxisAlignment
-                                                              .end,
-                                                      children: <Widget>[
-                                                        Container(
-                                                          child: Row(
-                                                              mainAxisAlignment:
-                                                                  MainAxisAlignment
-                                                                      .start,
-                                                              children: [
-                                                                Text('기준가:',
-                                                                    style: TextStyle(
-                                                                        fontWeight:
-                                                                            FontWeight
-                                                                                .bold,
-                                                                        fontSize:
-                                                                            11,
-                                                                        color: Colors
-                                                                            .green)),
-                                                                Align(
-                                                                  alignment:
-                                                                      Alignment
-                                                                          .centerRight,
-                                                                  child: Text(
-                                                                    '${snapshot.data[0].etfBefClosePrice} ',
-                                                                    textAlign:
-                                                                        TextAlign
-                                                                            .end,
-                                                                    style: TextStyle(
-                                                                        fontWeight:
-                                                                            FontWeight
-                                                                                .bold,
-                                                                        fontSize:
-                                                                            11,
-                                                                        color: Colors
-                                                                            .black),
-                                                                  ),
-                                                                ),
-                                                              ]),
-                                                        ),
-                                                        Row(
-                                                            mainAxisAlignment:
-                                                                MainAxisAlignment
-                                                                    .spaceEvenly,
-                                                            children: [
-                                                              Text('종가:',
-                                                                  style: TextStyle(
-                                                                      fontWeight:
-                                                                          FontWeight
-                                                                              .bold,
-                                                                      fontSize:
-                                                                          11,
-                                                                      color: Colors
-                                                                          .green)),
-                                                              Row(
-                                                                mainAxisAlignment:
-                                                                    MainAxisAlignment
-                                                                        .end,
-                                                                children: [
-                                                                  Text(
-                                                                    '${snapshot.data[0].etfClosePrice} ',
-                                                                    textAlign:
-                                                                        TextAlign
-                                                                            .end,
-                                                                    style: TextStyle(
-                                                                        fontWeight:
-                                                                            FontWeight
-                                                                                .bold,
-                                                                        fontSize:
-                                                                            11,
-                                                                        color: Colors
-                                                                            .black),
-                                                                  ),
-                                                                ],
-                                                              ),
-                                                            ]),
-                                                        Row(
-                                                            mainAxisAlignment:
-                                                                MainAxisAlignment
-                                                                    .spaceBetween,
-                                                            children: [
-                                                              Row(
-                                                                mainAxisAlignment:
-                                                                    MainAxisAlignment
-                                                                        .end,
-                                                                children: [
-                                                                  Icon(
-                                                                    getUpDownIcon(snapshot
-                                                                        .data[0]
-                                                                        .etfTodayDiffPrice),
-                                                                    size: 14,
-                                                                    color: getColor(snapshot
-                                                                        .data[0]
-                                                                        .etfTodayDiffPrice),
-                                                                  ),
-                                                                  Text(
-                                                                    '${snapshot.data[0].etfUdRateRealByToday}%[${snapshot.data[0].etfTodayDiffPrice}] ',
-                                                                    textAlign:
-                                                                        TextAlign
-                                                                            .end,
-                                                                    style: TextStyle(
-                                                                        fontWeight:
-                                                                            FontWeight
-                                                                                .bold,
-                                                                        fontSize:
-                                                                            11,
-                                                                        color: getColor(snapshot
-                                                                            .data[0]
-                                                                            .etfTodayDiffPrice)),
-                                                                  ),
-                                                                ],
-                                                              ),
-                                                            ]),
-                                                      ]),
-                                                ],
-                                              ),
-                                              Row(
-                                                mainAxisAlignment:
-                                                    MainAxisAlignment.start,
-                                                children: <Widget>[
-                                                  Text('편차 점수:',
-                                                      style: TextStyle(
-                                                          fontWeight:
-                                                              FontWeight.bold,
-                                                          fontSize: 14,
-                                                          color:
-                                                              Colors.black87)),
-                                                  Row(
-                                                    mainAxisAlignment:
-                                                        MainAxisAlignment.end,
-                                                    children: [
-                                                      Icon(
-                                                        getUpDownIcon(snapshot
-                                                            .data[0]
-                                                            .etfTodayDiffPrice),
-                                                        size: 24,
-                                                        color: getColor(snapshot
-                                                            .data[0]
-                                                            .etfTodayDiffPrice),
-                                                      ),
-                                                      Text(
-                                                        '${snapshot.data[0].etfTodayDiffPrice} ',
-                                                        textAlign:
-                                                            TextAlign.end,
-                                                        style: TextStyle(
-                                                            fontWeight:
-                                                                FontWeight.bold,
-                                                            fontSize: 18,
-                                                            color: getColor(snapshot
-                                                                .data[0]
-                                                                .etfTodayDiffPrice)),
-                                                      ),
-                                                    ],
-                                                  ),
-                                                ],
-                                              )
-                                            ],
-                                          ))),
-                                ),
-                              ),
-                              Container(
-                                padding: EdgeInsets.fromLTRB(2, 2, 2, 0),
-                                height: 120,
-                                width: 190,
-                                child: Card(
-                                  elevation: 5,
-                                  child: Padding(
-                                      padding: EdgeInsets.all(2),
-                                      child: Padding(
-                                          padding: const EdgeInsets.only(
-                                              left: 3, top: 5),
-                                          child: Column(
-                                            children: <Widget>[
-                                              Row(
-                                                mainAxisAlignment:
-                                                    MainAxisAlignment.start,
-                                                children: <Widget>[
-                                                  Padding(
-                                                    padding:
-                                                        const EdgeInsets.only(
-                                                            left: 3.0,
-                                                            right: 3.0),
-                                                    child: Align(
-                                                      alignment:
-                                                          Alignment.centerLeft,
-                                                      child: getImage(snapshot
-                                                          .data[1].etfStockId),
-                                                    ),
-                                                  ),
-                                                  Column(
-                                                      crossAxisAlignment:
-                                                          CrossAxisAlignment
-                                                              .end,
-                                                      children: <Widget>[
-                                                        Container(
-                                                          child: Row(
-                                                              mainAxisAlignment:
-                                                                  MainAxisAlignment
-                                                                      .start,
-                                                              children: [
-                                                                Text('기준가:',
-                                                                    style: TextStyle(
-                                                                        fontWeight:
-                                                                            FontWeight
-                                                                                .bold,
-                                                                        fontSize:
-                                                                            11,
-                                                                        color: Colors
-                                                                            .green)),
-                                                                Align(
-                                                                  alignment:
-                                                                      Alignment
-                                                                          .centerRight,
-                                                                  child: Text(
-                                                                    '${snapshot.data[1].etfBefClosePrice} ',
-                                                                    textAlign:
-                                                                        TextAlign
-                                                                            .end,
-                                                                    style: TextStyle(
-                                                                        fontWeight:
-                                                                            FontWeight
-                                                                                .bold,
-                                                                        fontSize:
-                                                                            11,
-                                                                        color: Colors
-                                                                            .black),
-                                                                  ),
-                                                                ),
-                                                              ]),
-                                                        ),
-                                                        Row(
-                                                            mainAxisAlignment:
-                                                                MainAxisAlignment
-                                                                    .spaceEvenly,
-                                                            children: [
-                                                              Text('종가:',
-                                                                  style: TextStyle(
-                                                                      fontWeight:
-                                                                          FontWeight
-                                                                              .bold,
-                                                                      fontSize:
-                                                                          11,
-                                                                      color: Colors
-                                                                          .green)),
-                                                              Row(
-                                                                mainAxisAlignment:
-                                                                    MainAxisAlignment
-                                                                        .end,
-                                                                children: [
-                                                                  Text(
-                                                                    '${snapshot.data[1].etfClosePrice} ',
-                                                                    textAlign:
-                                                                        TextAlign
-                                                                            .end,
-                                                                    style: TextStyle(
-                                                                        fontWeight:
-                                                                            FontWeight
-                                                                                .bold,
-                                                                        fontSize:
-                                                                            11,
-                                                                        color: Colors
-                                                                            .black),
-                                                                  ),
-                                                                ],
-                                                              ),
-                                                            ]),
-                                                        Row(
-                                                            mainAxisAlignment:
-                                                                MainAxisAlignment
-                                                                    .spaceBetween,
-                                                            children: [
-                                                              Row(
-                                                                mainAxisAlignment:
-                                                                    MainAxisAlignment
-                                                                        .end,
-                                                                children: [
-                                                                  Icon(
-                                                                    getUpDownIcon(snapshot
-                                                                        .data[1]
-                                                                        .etfTodayDiffPrice),
-                                                                    size: 14,
-                                                                    color: getColor(snapshot
-                                                                        .data[1]
-                                                                        .etfTodayDiffPrice),
-                                                                  ),
-                                                                  Text(
-                                                                    '${snapshot.data[1].etfUdRateRealByToday}%[${snapshot.data[1].etfTodayDiffPrice}] ',
-                                                                    textAlign:
-                                                                        TextAlign
-                                                                            .end,
-                                                                    style: TextStyle(
-                                                                        fontWeight:
-                                                                            FontWeight
-                                                                                .bold,
-                                                                        fontSize:
-                                                                            11,
-                                                                        color: getColor(snapshot
-                                                                            .data[1]
-                                                                            .etfTodayDiffPrice)),
-                                                                  ),
-                                                                ],
-                                                              ),
-                                                            ]),
-                                                      ]),
-                                                ],
-                                              ),
-                                              Row(
-                                                mainAxisAlignment:
-                                                    MainAxisAlignment.start,
-                                                children: <Widget>[
-                                                  Text('편차 점수:',
-                                                      style: TextStyle(
-                                                          fontWeight:
-                                                              FontWeight.bold,
-                                                          fontSize: 14,
-                                                          color:
-                                                              Colors.black87)),
-                                                  Row(
-                                                    mainAxisAlignment:
-                                                        MainAxisAlignment.end,
-                                                    children: [
-                                                      Icon(
-                                                        getUpDownIcon(snapshot
-                                                            .data[1]
-                                                            .etfTodayDiffPrice),
-                                                        size: 24,
-                                                        color: getColor(snapshot
-                                                            .data[1]
-                                                            .etfTodayDiffPrice),
-                                                      ),
-                                                      Text(
-                                                        '${snapshot.data[1].etfTodayDiffPrice} ',
-                                                        textAlign:
-                                                            TextAlign.end,
-                                                        style: TextStyle(
-                                                            fontWeight:
-                                                                FontWeight.bold,
-                                                            fontSize: 18,
-                                                            color: getColor(snapshot
-                                                                .data[1]
-                                                                .etfTodayDiffPrice)),
-                                                      ),
-                                                    ],
-                                                  ),
-                                                ],
-                                              )
-                                            ],
-                                          ))),
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
-                        SizedBox(height: 300),
-                      ],
-                    );
-                  } else if (snapshot.hasError) {
-                    print('error!');
-                    print("${snapshot.error}");
-                    return Text("${snapshot.error}");
-                  }
-
-                  return CircularProgressIndicator();
-                }),
-          ),
         ]),
         floatingActionButton: Padding(
           padding: const EdgeInsets.only(bottom: 48.0),
@@ -2648,10 +1988,3 @@ class _DibrHistoryPageState extends State<DibrHistoryPage> {
   }
 }
 
-class EtfItem {
-  const EtfItem(this.id, this.name, this.icon);
-
-  final String name;
-  final String id;
-  final Icon icon;
-}

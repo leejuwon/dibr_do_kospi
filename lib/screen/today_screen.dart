@@ -4,7 +4,7 @@ import 'package:flutter/widgets.dart';
 import "package:flutter_dibr_do_kospi/ad_manager.dart";
 import "package:flutter_dibr_do_kospi/main.dart";
 import "package:flutter_dibr_do_kospi/model/model_market.dart";
-import "package:flutter_dibr_do_kospi/model/model_etfStock.dart";
+import "package:flutter_dibr_do_kospi/screen/etfStockInfo_screen.dart";
 import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
 import 'package:http/http.dart' as http;
@@ -18,53 +18,6 @@ class DibrTodayPage extends StatefulWidget {
 
 class _DibrTodayPageState extends State<DibrTodayPage> {
   Future<MarketInfo> futureMarketInfo;
-  Future<EtfStockInfo> futureEtfStockInfo;
-
-  EtfItem selectedEtf;
-  List<EtfItem> etfStocks = <EtfItem>[
-    const EtfItem(
-        'KDX',
-        'KODEX',
-        Icon(
-          Icons.check_circle_outline,
-          color: Colors.redAccent,
-        )),
-    const EtfItem(
-        'TGR',
-        'TIGER',
-        Icon(
-          Icons.check_circle_outline,
-          color: Colors.deepOrangeAccent,
-        )),
-    const EtfItem(
-        'KSF',
-        'KOSEF',
-        Icon(
-          Icons.check_circle_outline,
-          color: Colors.yellowAccent,
-        )),
-    const EtfItem(
-        'KBS',
-        'KBSTAR',
-        Icon(
-          Icons.check_circle_outline,
-          color: Colors.greenAccent,
-        )),
-    const EtfItem(
-        'ARR',
-        'ARRIRANG',
-        Icon(
-          Icons.check_circle_outline,
-          color: Colors.blueAccent,
-        )),
-    const EtfItem(
-        'KSP',
-        'KOSPI',
-        Icon(
-          Icons.check_circle_outline,
-          color: Colors.indigoAccent,
-        )),
-  ];
 
   //DateTime _selectedTime = DateTime.now();
 
@@ -115,41 +68,6 @@ class _DibrTodayPageState extends State<DibrTodayPage> {
       case RewardedVideoAdEvent.rewarded:
         setState(() {
           futureMarketInfo = fetchMarketInfo('Today');
-        });
-        break;
-      default:
-      // do nothing
-    }
-  }
-
-  void _onEtfRewardedAdEvent(RewardedVideoAdEvent event,
-      {String rewardType, int rewardAmount}) {
-    switch (event) {
-      case RewardedVideoAdEvent.loaded:
-        setState(() {
-          //_isRewardedAdReady = true;
-        });
-        break;
-      case RewardedVideoAdEvent.closed:
-        setState(() {
-          //_isRewardedAdReady = false;
-        });
-        RewardedVideoAd.instance.load(
-          targetingInfo: MobileAdTargetingInfo(),
-          adUnitId: AdManager.rewardedAdUnitId,
-        );
-        break;
-      case RewardedVideoAdEvent.failedToLoad:
-        setState(() {
-          //_isHistRewardedAdReady = true;
-          futureEtfStockInfo = fetchEtfInfo('Hist');
-        });
-        print('Failed to load a rewarded ad');
-        break;
-      case RewardedVideoAdEvent.rewarded:
-        print('@@@@@rewarded!!!!');
-        setState(() {
-          futureEtfStockInfo = fetchEtfInfo('Hist');
         });
         break;
       default:
@@ -324,30 +242,6 @@ class _DibrTodayPageState extends State<DibrTodayPage> {
     }
   }
 
-  Future<EtfStockInfo> fetchEtfInfo(pType) async {
-    if (pType == 'Init') {
-      print('pType:' + pType);
-      return EtfStockInfo.fromInitJson();
-    } else {
-      print('@@@@@@@@@@@@@@@@@@@@로드??');
-      final response = await http.get(Uri.encodeFull(
-          'http://dibr.cafe24app.com/marketInfo/getSelectedEtfInfoDay/${_selectedEtf}'));
-      //headers: {"Accept": "application/json"});
-
-      if (response.statusCode == 200) {
-        Map dataJson = jsonDecode(response.body);
-        print("1####################################");
-        print(dataJson);
-        print(dataJson[snpScore]);
-        print("2####################################");
-        //var marketInfo = ;
-        return EtfStockInfo.fromJson(dataJson);
-      } else {
-        throw Exception('Failed to load MarketInfo');
-      }
-    }
-  }
-
   @override
   Widget build(BuildContext context) {
     double iconSize = 20;
@@ -366,6 +260,7 @@ class _DibrTodayPageState extends State<DibrTodayPage> {
               StreamBuilder(
               stream: futureMarketInfo.asStream(),
               builder: (BuildContext context, snapshot) {
+                final marketInfo = snapshot.data;
                 print('snapshot~~~~~~~~~~~~~~~~~~~~~~~~~~~');
                 print(snapshot);
                 if (snapshot.hasData) {
@@ -377,7 +272,7 @@ class _DibrTodayPageState extends State<DibrTodayPage> {
                   print(snapshot.data.snpUdPrice);
 
                   return Container(
-                    margin: EdgeInsets.all(10),
+                    margin: EdgeInsets.all(3),
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: <Widget>[
@@ -496,7 +391,7 @@ class _DibrTodayPageState extends State<DibrTodayPage> {
                                   Container(
                                     padding: EdgeInsets.fromLTRB(2,2,2,0),
                                     height: 120,
-                                    width: 190,
+                                    width: 195,
                                     child: Card(
                                       elevation: 5,
                                       child: Padding(
@@ -512,7 +407,7 @@ class _DibrTodayPageState extends State<DibrTodayPage> {
                                                         padding: const EdgeInsets.only(left: 3.0,right: 3.0),
                                                         child: Align(
                                                           alignment: Alignment.centerLeft,
-                                                          child: Image.asset('images/snp_logo.png',height: 70,width: 70),
+                                                          child: Image.asset('images/snp_logo.png',height: 70,width: 60),
                                                         ),
                                                       ),
                                                       Column(
@@ -627,7 +522,7 @@ class _DibrTodayPageState extends State<DibrTodayPage> {
                                   Container(
                                     padding: EdgeInsets.fromLTRB(2,2,2,0),
                                     height: 120,
-                                    width: 190,
+                                    width: 195,
                                     child: Card(
                                       elevation: 5,
                                       child: Padding(
@@ -643,7 +538,7 @@ class _DibrTodayPageState extends State<DibrTodayPage> {
                                                         padding: const EdgeInsets.only(left: 3.0,right: 3.0),
                                                         child: Align(
                                                           alignment: Alignment.centerLeft,
-                                                          child: Image.asset('images/euro_logo.png',height: 70,width: 70),
+                                                          child: Image.asset('images/euro_logo.png',height: 70,width: 60),
                                                         ),
                                                       ),
                                                       Column(
@@ -762,7 +657,7 @@ class _DibrTodayPageState extends State<DibrTodayPage> {
                                   Container(
                                     padding: EdgeInsets.fromLTRB(2,2,2,0),
                                     height: 120,
-                                    width: 190,
+                                    width: 195,
                                     child: Card(
                                       elevation: 5,
                                       child: Padding(
@@ -778,7 +673,7 @@ class _DibrTodayPageState extends State<DibrTodayPage> {
                                                         padding: const EdgeInsets.only(left: 3.0,right: 3.0),
                                                         child: Align(
                                                           alignment: Alignment.centerLeft,
-                                                          child: Image.asset('images/wtinew_logo.png',height: 70,width: 70),
+                                                          child: Image.asset('images/wtinew_logo.png',height: 70,width: 60),
                                                         ),
                                                       ),
                                                       Column(
@@ -893,7 +788,7 @@ class _DibrTodayPageState extends State<DibrTodayPage> {
                                   Container(
                                     padding: EdgeInsets.fromLTRB(2,2,2,0),
                                     height: 120,
-                                    width: 190,
+                                    width: 195,
                                     child: Card(
                                       elevation: 5,
                                       child: Padding(
@@ -909,7 +804,7 @@ class _DibrTodayPageState extends State<DibrTodayPage> {
                                                         padding: const EdgeInsets.only(left: 3.0,right: 3.0),
                                                         child: Align(
                                                           alignment: Alignment.centerLeft,
-                                                          child: Image.asset('images/dubai_logo.png',height: 70,width: 70),
+                                                          child: Image.asset('images/dubai_logo.png',height: 70,width: 60),
                                                         ),
                                                       ),
                                                       Column(
@@ -1028,7 +923,7 @@ class _DibrTodayPageState extends State<DibrTodayPage> {
                                   Container(
                                     padding: EdgeInsets.fromLTRB(2,2,2,0),
                                     height: 120,
-                                    width: 190,
+                                    width: 195,
                                     child: Card(
                                       elevation: 5,
                                       child: Padding(
@@ -1044,7 +939,7 @@ class _DibrTodayPageState extends State<DibrTodayPage> {
                                                         padding: const EdgeInsets.only(left: 3.0,right: 3.0),
                                                         child: Align(
                                                           alignment: Alignment.centerLeft,
-                                                          child: Image.asset('images/brent_logo.png',height: 70,width: 70),
+                                                          child: Image.asset('images/brent_logo.png',height: 70,width: 60),
                                                         ),
                                                       ),
                                                       Column(
@@ -1159,7 +1054,7 @@ class _DibrTodayPageState extends State<DibrTodayPage> {
                                   Container(
                                     padding: EdgeInsets.fromLTRB(2,2,2,0),
                                     height: 120,
-                                    width: 190,
+                                    width: 195,
                                     child: Card(
                                       elevation: 5,
                                       child: Padding(
@@ -1175,7 +1070,7 @@ class _DibrTodayPageState extends State<DibrTodayPage> {
                                                         padding: const EdgeInsets.only(left: 3.0,right: 3.0),
                                                         child: Align(
                                                           alignment: Alignment.centerLeft,
-                                                          child: Image.asset('images/excnew_logo.png',height: 70,width: 70),
+                                                          child: Image.asset('images/excnew_logo.png',height: 70,width: 60),
                                                         ),
                                                       ),
                                                       Column(
@@ -1661,135 +1556,17 @@ class _DibrTodayPageState extends State<DibrTodayPage> {
                                 ))),
                         SizedBox(height: 10),
                         Container(
-                          child: Image.asset(
-                            'images/pic_k.png',
-                            fit: BoxFit.fill,
-                          ),
-                        ),
-                        SizedBox(height: 10),
-                        Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                            children: [
-                              DropdownButton<EtfItem>(
-                                hint: Text("ETF 종목을 선택해주세요."),
-                                value: selectedEtf,
-                                onChanged: (EtfItem Value) {
-                                  setState(() {
-                                    selectedEtf = Value;
-                                  });
-                                },
-                                items: etfStocks.map((EtfItem user) {
-                                  return DropdownMenuItem<EtfItem>(
-                                    value: user,
-                                    child: Row(
-                                      children: <Widget>[
-                                        user.icon,
-                                        SizedBox(
-                                          width: 10,
-                                        ),
-                                        Text(
-                                          user.name,
-                                          style: TextStyle(color: Colors.black),
-                                        ),
-                                      ],
-                                    ),
-                                  );
-                                }).toList(),
-                              ),
-                              FlatButton(
-                                color: Colors.cyan,
-                                textColor: Colors.white,
-                                disabledColor: Colors.grey,
-                                disabledTextColor: Colors.black,
-                                padding: EdgeInsets.all(8.0),
-                                splashColor: Colors.cyanAccent,
-                                shape: RoundedRectangleBorder(
-                                    borderRadius:
-                                        new BorderRadius.circular(30.0)),
-                                onPressed: () {
-                                  print(exRtScore.abs());
-                                  showDialog(
-                                    context: context,
-                                    builder: (context) {
-                                      return AlertDialog(
-                                        title: Text('Need a StockInfo?'),
-                                        content: Text(
-                                            'Watch an Ad to get a information!'),
-                                        actions: <Widget>[
-                                          FlatButton(
-                                            child: Text('cancel'.toUpperCase()),
-                                            onPressed: () {
-                                              Navigator.pop(context);
-                                            },
-                                          ),
-                                          FlatButton(
-                                            child: Text('ok'.toUpperCase()),
-                                            onPressed: () {
-                                              RewardedVideoAd
-                                                      .instance.listener =
-                                                  _onEtfRewardedAdEvent;
-                                              Navigator.pop(context);
-                                              RewardedVideoAd.instance.show();
-                                              //RestApi_Get();
-                                            },
-                                          ),
-                                        ],
-                                      );
-                                    },
-                                  );
-                                },
-                                child: Row(
-                                  children: <Widget>[
-                                    Icon(
-                                      Icons.movie,
-                                      size: 25,
-                                    ),
-                                    Text(
-                                      "(Ad)ETF 정보 조회",
-                                      style: TextStyle(fontSize: 14.0),
-                                    ),
-                                  ],
-                                ),
-                              )
-                            ]),
-                        SizedBox(height: 10),
-                        Stack(
-                          children: <Widget>[
-                            Container(
-                              color: Colors.black,
-                              height: 41,
-                              width: 217,
-                            ),
-                            Row(
-                                mainAxisAlignment: MainAxisAlignment.start,
-                                children: [
-                                  Text(' ',
-                                      style: TextStyle(
-                                        fontWeight: FontWeight.bold,
-                                        fontSize: 26,
-                                        fontStyle: FontStyle.normal,
-                                        backgroundColor: Colors.blue,
-                                        letterSpacing: 2.0,
-                                      )),
-                                  Text('   ETF 투자 결과   ',
-                                      style: TextStyle(
-                                          fontWeight: FontWeight.bold,
-                                          fontSize: 20,
-                                          fontStyle: FontStyle.normal,
-                                          letterSpacing: 2.0,
-                                          color: Colors.yellowAccent)),
-                                  Text(' ',
-                                      style: TextStyle(
-                                          fontWeight: FontWeight.bold,
-                                          fontSize: 26,
-                                          fontStyle: FontStyle.normal,
-                                          backgroundColor: Colors.blue,
-                                          letterSpacing: 2.0)),
-                                ]),
-                          ],
-                        ),
-                        SizedBox(height: 10),
-                        Table(
+                            padding: EdgeInsets.fromLTRB(2, 2, 2, 0),
+                            height: 300,
+                            width: 420,
+                            child: Card(
+                          elevation: 5,
+                          child: Padding(
+                            padding: EdgeInsets.all(2),
+                            child: Padding(
+                              padding: const EdgeInsets.only(
+                                  left: 3, top: 5),
+                              child: Table(
                           // columnWidths: ,
                           border: TableBorder(
                             bottom: BorderSide(
@@ -2123,6 +1900,64 @@ class _DibrTodayPageState extends State<DibrTodayPage> {
                             ]),
                           ],
                         ),
+                            )
+                            )
+                          )
+                            ),
+                        SizedBox(height: 50),
+                        SizedBox(
+                            height: 60,
+                            child: Padding(
+                              padding: const EdgeInsets.only(left: 10.0,right: 10.0),
+                              child: RaisedButton(
+                                child: Row(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: <Widget>[
+                                    Icon(
+                                      Icons.redo,
+                                      size: 40.0,
+                                      color: Colors.white,
+                                    ),
+                                    Text("ETF 종목 정보 조회",
+                                        style: TextStyle(
+                                            fontSize: 24, color: Colors.white)),
+                                  ],
+                                ),
+                                color: Colors.lightBlueAccent,
+                                shape: RoundedRectangleBorder(
+                                    borderRadius:
+                                    new BorderRadius.circular(20.0)),
+                                onPressed: () {
+                                  var openStandardData = snapshot.data.kspOpenPrice;
+                                  if(openStandardData == 'undefined' || openStandardData == null || openStandardData == 0.0){
+                                    showDialog(
+                                    context: context,
+                                    builder: (context)
+                                    {
+                                      return AlertDialog(
+                                        title: Text('[Info]'),
+                                        content: Text(
+                                            '장 시작 후 시장 정보 조회를 하셔야합니다!'),
+                                        actions: <Widget>[
+                                          FlatButton(
+                                            child: Text('ok'.toUpperCase()),
+                                            onPressed: () {
+                                              Navigator.pop(context);
+                                            },
+                                          ),
+                                        ],
+                                      );
+                                    });
+                                  }else{
+                                    Navigator.of(context).push(MaterialPageRoute<Null>(
+                                        fullscreenDialog: true,
+                                        builder: (BuildContext context){
+                                          return DibrEtfStockInfoPage(marketInfo: marketInfo);
+                                        }
+                                    ));
+                                  }
+                                },
+                              ),)),
                         SizedBox(height: 300),
                       ],
                     ),

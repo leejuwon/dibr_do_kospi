@@ -26,8 +26,11 @@ class EtfStockInfo {
   final double etfYearAggregatePrice;
   final String etfTodayConclYn;
   final double etfTodayResultRate;
+  final double etfRsvBuyRate;
+  final double etfRsvBuyPrc;
   final String etfStockGroup;
   final String etfStockType;
+
 
   //final DocumentReference reference;
 
@@ -56,6 +59,8 @@ class EtfStockInfo {
     this.etfYearAggregatePrice,
     this.etfTodayConclYn,
     this.etfTodayResultRate,
+    this.etfRsvBuyRate,
+    this.etfRsvBuyPrc,
     this.etfStockGroup,
     this.etfStockType
   });
@@ -87,8 +92,11 @@ class EtfStockInfo {
         etfYearAggregatePrice: map['etfYearAggregatePrice'] == null? 0.0 : map['etfYearAggregatePrice'].toDouble(),
         etfTodayConclYn: map['etfTodayConclYn'],
         etfTodayResultRate: map['etfTodayResultRate'] == null? 0.0 : map['etfTodayResultRate'].toDouble(),
+        etfRsvBuyRate: map['etfRsvBuyRate'] == null? 0.0 : map['etfRsvBuyRate'].toDouble(),
+        etfRsvBuyPrc: map['etfRsvBuyPrc'] == null? 0.0 : map['etfRsvBuyPrc'].toDouble(),
         etfStockGroup: map['etfStockGroup'],
         etfStockType: map['etfStockType']
+
   );
 }
 
@@ -119,8 +127,10 @@ class EtfStockInfo {
       etfYearAggregatePrice: 0.0,
       etfTodayConclYn: 'N',
       etfTodayResultRate: 0.0,
-        etfStockGroup: null,
-        etfStockType: null
+      etfRsvBuyRate: 0.0,
+      etfRsvBuyPrc: 0.0,
+      etfStockGroup: null,
+      etfStockType: null
     );
   }
 
@@ -149,6 +159,8 @@ class EtfStockInfo {
     'etfYearAggregatePrice': etfYearAggregatePrice == null? 0.0 : etfYearAggregatePrice.toDouble(),
     'etfTodayConclYn': etfTodayConclYn,
     'etfTodayResultRate': etfTodayResultRate == null? 0.0 : etfTodayResultRate.toDouble(),
+    'etfRsvBuyRate': etfRsvBuyRate == null? 0.0 : etfRsvBuyRate.toDouble(),
+    'etfRsvBuyPrc': etfRsvBuyPrc == null? 0.0 : etfRsvBuyPrc.toDouble(),
     'etfStockGroup': etfStockGroup,
     'etfStockType': etfStockType
   };

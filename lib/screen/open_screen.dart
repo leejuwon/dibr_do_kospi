@@ -98,34 +98,44 @@ class _OpenScreenState extends State<OpenScreen> {
                               ),
                               Container(
                                 padding: EdgeInsets.fromLTRB(20, 15, 20, 40),
-                                child: Image.asset('images/backg1.png',fit: BoxFit.fill),
+                                child: Image.asset('images/main_bg_3.jpg',
+                                    fit: BoxFit.fill),
                                 height: screenSize.height - 400,
                               ),
                               SizedBox(
                                 height: 20,
                               ),
-                              RaisedButton(
-                                child: Row(
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  children: <Widget>[
-                                    Icon(
-                                      Icons.play_arrow,
-                                      size: 40.0,
-                                      color: Colors.white,
+                              SizedBox(
+                                height: 60,
+                                child: Padding(
+                                  padding: const EdgeInsets.only(
+                                      left: 10.0, right: 10.0),
+                                  child: RaisedButton(
+                                    child: Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.center,
+                                      children: <Widget>[
+                                        Icon(
+                                          Icons.play_arrow,
+                                          size: 40.0,
+                                          color: Colors.white,
+                                        ),
+                                        Text("시작하기",
+                                            style: TextStyle(
+                                                fontSize: 24,
+                                                color: Colors.white)),
+                                      ],
                                     ),
-                                    Text("시작하기",
-                                        style: TextStyle(
-                                            fontSize: 24, color: Colors.white)),
-                                  ],
+                                    color: Colors.indigoAccent,
+                                    shape: RoundedRectangleBorder(
+                                        borderRadius:
+                                            new BorderRadius.circular(30.0)),
+                                    onPressed: () {
+                                      _onClick();
+                                    },
+                                  ),
                                 ),
-                                color: Colors.indigoAccent,
-                                shape: RoundedRectangleBorder(
-                                    borderRadius:
-                                        new BorderRadius.circular(30.0)),
-                                onPressed: () {
-                                  _onClick();
-                                },
-                              ),
+                              )
                             ],
                           )))))),
         ],
