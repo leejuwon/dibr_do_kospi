@@ -142,6 +142,27 @@ class _DibrEtfStockInfoPageState extends State<DibrEtfStockInfoPage> {
     }
   }
 
+  String getYn(pData) {
+    if (pData == null || pData == 'undefined') {
+      pData = 'N';
+    }
+
+    if (pData == 'N') {
+      return "No";
+    } else {
+      return "Yes";
+    }
+  }
+
+  String getNumberWithComma(pNum){
+    if (pNum == null || pNum == 'undefined') {
+      return "0.00 ";
+    }else{
+      return new NumberFormat('###,###,###,###.##').format(pNum).replaceAll(' ', '')+" ";
+    }
+
+  }
+
   IconData getUpDownIcon(number) {
     if (number == null || number == 'undefined') {
       number = 0;
@@ -161,11 +182,11 @@ class _DibrEtfStockInfoPageState extends State<DibrEtfStockInfoPage> {
     }
 
     if (pType == 'L') {
-      return Image.asset('images/leverage_logo_2.png', height: 120, width: 90);
+      return Image.asset('images/leverage_logo_2.png', height: 100, width: 80);
     } else if (pType == 'I') {
-      return Image.asset('images/inverse_logo_2.png', height: 120, width: 90);
+      return Image.asset('images/inverse_logo_2.png', height: 100, width: 80);
     } else {
-      return Image.asset('images/leverage_logo_2.png', height: 120, width: 90);
+      return Image.asset('images/leverage_logo_2.png', height: 100, width: 80);
     }
   }
 
@@ -201,23 +222,29 @@ class _DibrEtfStockInfoPageState extends State<DibrEtfStockInfoPage> {
           for (var etfStock in dataList) {
             //etfStocks.add(etfStock);
             //dataJson = etfStock;
+            dataStock = null;
             dataStock = EtfStockInfo.fromJson(etfStock);
             print("1####################################");
             print(dataStock);
             print(etfStock);
             print("2####################################");
             rtnEtfStocks.add(dataStock);
-            rtnEtfStocks.add(dataStock);
+            //rtnEtfStocks.add(dataStock);
+            //print(rtnEtfStocks[0]);
+            //print(rtnEtfStocks[1]);
           }
         } else if (dataLength == 1) {
+          print("33####################################");
           dataJson = dataList[0];
           dataStock = EtfStockInfo.fromJson(dataJson);
           rtnEtfStocks.add(dataStock);
           rtnEtfStocks.add(EtfStockInfo.fromInitJson());
         } else if (dataLength == 0) {
+          print("44####################################");
           rtnEtfStocks.add(EtfStockInfo.fromInitJson());
           rtnEtfStocks.add(EtfStockInfo.fromInitJson());
         } else {
+          print("55####################################");
           rtnEtfStocks.add(EtfStockInfo.fromInitJson());
           rtnEtfStocks.add(EtfStockInfo.fromInitJson());
         }
@@ -394,34 +421,55 @@ class _DibrEtfStockInfoPageState extends State<DibrEtfStockInfoPage> {
                                       new BorderRadius.circular(30.0)),
                               onPressed: () {
                                 print(exRtScore.abs());
-                                showDialog(
-                                  context: context,
-                                  builder: (context) {
-                                    return AlertDialog(
-                                      title: Text('Need a StockInfo?'),
-                                      content: Text(
-                                          'Watch an Ad to get a information!'),
-                                      actions: <Widget>[
-                                        FlatButton(
-                                          child: Text('cancel'.toUpperCase()),
-                                          onPressed: () {
-                                            Navigator.pop(context);
-                                          },
-                                        ),
-                                        FlatButton(
-                                          child: Text('ok'.toUpperCase()),
-                                          onPressed: () {
-                                            RewardedVideoAd.instance.listener =
-                                                _onHistEtfRewardedAdEvent;
-                                            Navigator.pop(context);
-                                            RewardedVideoAd.instance.show();
-                                            //RestApi_Get();
-                                          },
-                                        ),
-                                      ],
-                                    );
-                                  },
-                                );
+                                if(_selectedEtf == 'undefined' || _selectedEtf == null || _selectedEtf == 0.0){
+                                  showDialog(
+                                      context: context,
+                                      builder: (context)
+                                      {
+                                        return AlertDialog(
+                                          title: Text('[Info]'),
+                                          content: Text(
+                                              'ETF 종목을 선택해주세요!'),
+                                          actions: <Widget>[
+                                            FlatButton(
+                                              child: Text('ok'.toUpperCase()),
+                                              onPressed: () {
+                                                Navigator.pop(context);
+                                              },
+                                            ),
+                                          ],
+                                        );
+                                      });
+                                }else{
+                                  showDialog(
+                                    context: context,
+                                    builder: (context) {
+                                      return AlertDialog(
+                                        title: Text('Need a StockInfo?'),
+                                        content: Text(
+                                            'Watch an Ad to get a information!'),
+                                        actions: <Widget>[
+                                          FlatButton(
+                                            child: Text('cancel'.toUpperCase()),
+                                            onPressed: () {
+                                              Navigator.pop(context);
+                                            },
+                                          ),
+                                          FlatButton(
+                                            child: Text('ok'.toUpperCase()),
+                                            onPressed: () {
+                                              RewardedVideoAd.instance.listener =
+                                                  _onHistEtfRewardedAdEvent;
+                                              Navigator.pop(context);
+                                              RewardedVideoAd.instance.show();
+                                              //RestApi_Get();
+                                            },
+                                          ),
+                                        ],
+                                      );
+                                    },
+                                  );
+                                }
                               },
                               child: Row(
                                 children: <Widget>[
@@ -512,7 +560,30 @@ class _DibrEtfStockInfoPageState extends State<DibrEtfStockInfoPage> {
                                                           .etfStockType),
                                                     ),
                                                   ),
-                                                  Table(
+                                                  Column(
+                                                      crossAxisAlignment: CrossAxisAlignment.start,
+                                                      children: <Widget>[
+                                                        Row(
+                                                          mainAxisAlignment:
+                                                          MainAxisAlignment.start,
+                                                            children: <Widget>[
+                                                              Text(
+                                                                '\n ${snapshot.data[0].etfStockName} ',
+                                                                textAlign:
+                                                                TextAlign
+                                                                    .end,
+                                                                style: TextStyle(
+                                                                    fontWeight:
+                                                                    FontWeight
+                                                                        .bold,
+                                                                    fontSize:
+                                                                    14,
+                                                                    color: Colors
+                                                                        .pinkAccent),
+                                                              ),
+                                                            ],
+                                                        ),
+                                                        Table(
                                                     // columnWidths: ,
                                                     border: TableBorder(
                                                       bottom: BorderSide(
@@ -545,14 +616,53 @@ class _DibrEtfStockInfoPageState extends State<DibrEtfStockInfoPage> {
                                                     //defaultColumnWidth: FixedColumnWidth(60.0),
                                                     columnWidths: {
                                                       0: FixedColumnWidth(50.0),
-                                                      1: FixedColumnWidth(90.0),
-                                                      2: FixedColumnWidth(55.0),
-                                                      3: FixedColumnWidth(95.0),
+                                                      1: FixedColumnWidth(95.0),
+                                                      2: FixedColumnWidth(50.0),
+                                                      3: FixedColumnWidth(100.0),
                                                     },
 
                                                     children: [
                                                       TableRow(children: [
-                                                        Text('종목명:',
+                                                        Text('기준가:',
+                                                            style: TextStyle(
+                                                                fontWeight:
+                                                                FontWeight
+                                                                    .bold,
+                                                                fontSize: 11,
+                                                                color: Colors
+                                                                    .green)),
+                                                        Text(
+                                                            getNumberWithComma(snapshot.data[0].etfBefClosePrice),
+                                                            textAlign:
+                                                            TextAlign
+                                                                .end,
+                                                            style: TextStyle(
+                                                                fontSize:
+                                                                11,
+                                                                fontWeight:
+                                                                FontWeight
+                                                                    .bold,
+                                                                color: Colors
+                                                                    .black)),
+                                                        Text(' ',
+                                                            style: TextStyle(
+                                                                fontWeight:
+                                                                FontWeight
+                                                                    .bold,
+                                                                fontSize: 11,
+                                                                color: Colors
+                                                                    .green)),
+                                                        Text(' ',
+                                                            style: TextStyle(
+                                                                fontWeight:
+                                                                FontWeight
+                                                                    .bold,
+                                                                fontSize: 11,
+                                                                color: Colors
+                                                                    .black)),
+                                                      ]),
+                                                      TableRow(children: [
+                                                        Text('시가(%):\n ',
                                                             style: TextStyle(
                                                                 fontWeight:
                                                                     FontWeight
@@ -566,7 +676,7 @@ class _DibrEtfStockInfoPageState extends State<DibrEtfStockInfoPage> {
                                                                     .end,
                                                             children: [
                                                               Text(
-                                                                '${snapshot.data[0].etfStockName} ',
+                                                                getNumberWithComma(snapshot.data[0].etfOpenPrice),
                                                                 textAlign:
                                                                     TextAlign
                                                                         .end,
@@ -574,61 +684,7 @@ class _DibrEtfStockInfoPageState extends State<DibrEtfStockInfoPage> {
                                                                     fontWeight:
                                                                         FontWeight
                                                                             .bold,
-                                                                    fontSize:
-                                                                        10,
-                                                                    color: Colors
-                                                                        .black),
-                                                              ),
-                                                            ]),
-                                                        Text('  기준가:',
-                                                            style: TextStyle(
-                                                                fontWeight:
-                                                                    FontWeight
-                                                                        .bold,
-                                                                fontSize: 12,
-                                                                color: Colors
-                                                                    .green)),
-                                                        Row(
-                                                            mainAxisAlignment:
-                                                                MainAxisAlignment
-                                                                    .end,
-                                                            children: [
-                                                              Text(
-                                                                  '${snapshot.data[0].etfBefClosePrice} ',
-                                                                  textAlign:
-                                                                      TextAlign
-                                                                          .end,
-                                                                  style: TextStyle(
-                                                                      fontSize:
-                                                                          10,
-                                                                      color: Colors
-                                                                          .black)),
-                                                            ]),
-                                                      ]),
-                                                      TableRow(children: [
-                                                        Text('시가(%):\n ',
-                                                            style: TextStyle(
-                                                                fontWeight:
-                                                                    FontWeight
-                                                                        .bold,
-                                                                fontSize: 12,
-                                                                color: Colors
-                                                                    .green)),
-                                                        Column(
-                                                            crossAxisAlignment:
-                                                                CrossAxisAlignment
-                                                                    .end,
-                                                            children: [
-                                                              Text(
-                                                                '${snapshot.data[0].etfOpenPrice} ',
-                                                                textAlign:
-                                                                    TextAlign
-                                                                        .end,
-                                                                style: TextStyle(
-                                                                    fontWeight:
-                                                                        FontWeight
-                                                                            .bold,
-                                                                    fontSize: 10,
+                                                                    fontSize: 11,
                                                                     color: Colors
                                                                         .black),
                                                               ),
@@ -637,15 +693,15 @@ class _DibrEtfStockInfoPageState extends State<DibrEtfStockInfoPage> {
                                                                 children: [
                                                                   Icon(
                                                                     getUpDownIcon(snapshot.data[0].etfUdRateRealByOpen),
-                                                                    size: 12,
+                                                                    size: 14,
                                                                     color: getColor(snapshot.data[0].etfUdRateRealByOpen),
                                                                   ),
                                                                   Text(
-                                                                    '${snapshot.data[0].etfUdRateRealByOpen}%[${snapshot.data[0].etfOpenPrice - snapshot.data[0].etfBefClosePrice}] ',
+                                                                    '${snapshot.data[0].etfUdRateRealByOpen}%['+getNumberWithComma(snapshot.data[0].etfOpenPrice - snapshot.data[0].etfBefClosePrice)+'] ',
                                                                     textAlign: TextAlign.end,
                                                                     style: TextStyle(
                                                                         fontWeight: FontWeight.bold,
-                                                                        fontSize: 10,
+                                                                        fontSize: 11,
                                                                         color: getColor(snapshot.data[0].etfUdRateRealByOpen)),
                                                                   ),
                                                                 ],
@@ -656,7 +712,7 @@ class _DibrEtfStockInfoPageState extends State<DibrEtfStockInfoPage> {
                                                                 fontWeight:
                                                                 FontWeight
                                                                     .bold,
-                                                                fontSize: 10,
+                                                                fontSize: 11,
                                                                 color: Colors
                                                                     .green)),
                                                         Column(
@@ -665,7 +721,7 @@ class _DibrEtfStockInfoPageState extends State<DibrEtfStockInfoPage> {
                                                                 .end,
                                                             children: [
                                                               Text(
-                                                                '${snapshot.data[0].etfClosePrice} ',
+                                                                getNumberWithComma(snapshot.data[0].etfClosePrice),
                                                                 textAlign:
                                                                 TextAlign
                                                                     .end,
@@ -673,7 +729,7 @@ class _DibrEtfStockInfoPageState extends State<DibrEtfStockInfoPage> {
                                                                     fontWeight:
                                                                     FontWeight
                                                                         .bold,
-                                                                    fontSize: 10,
+                                                                    fontSize: 11,
                                                                     color: Colors
                                                                         .black),
                                                               ),
@@ -682,15 +738,15 @@ class _DibrEtfStockInfoPageState extends State<DibrEtfStockInfoPage> {
                                                                 children: [
                                                                   Icon(
                                                                     getUpDownIcon(snapshot.data[0].etfUdRateRealByClose),
-                                                                    size: 12,
+                                                                    size: 14,
                                                                     color: getColor(snapshot.data[0].etfUdRateRealByClose),
                                                                   ),
                                                                   Text(
-                                                                    '${snapshot.data[0].etfUdRateRealByClose}%[${snapshot.data[0].etfClosePrice - snapshot.data[0].etfBefClosePrice}] ',
+                                                                    '${snapshot.data[0].etfUdRateRealByClose}%['+getNumberWithComma(snapshot.data[0].etfClosePrice - snapshot.data[0].etfBefClosePrice)+'] ',
                                                                     textAlign: TextAlign.end,
                                                                     style: TextStyle(
                                                                         fontWeight: FontWeight.bold,
-                                                                        fontSize: 10,
+                                                                        fontSize: 11,
                                                                         color: getColor(snapshot.data[0].etfUdRateRealByClose)),
                                                                   ),
                                                                 ],
@@ -703,7 +759,7 @@ class _DibrEtfStockInfoPageState extends State<DibrEtfStockInfoPage> {
                                                                 fontWeight:
                                                                     FontWeight
                                                                         .bold,
-                                                                fontSize: 12,
+                                                                fontSize: 11,
                                                                 color: Colors
                                                                     .green)),
                                                         Column(
@@ -712,7 +768,7 @@ class _DibrEtfStockInfoPageState extends State<DibrEtfStockInfoPage> {
                                                                 .end,
                                                             children: [
                                                               Text(
-                                                                '${snapshot.data[0].etfHighPrice} ',
+                                                                getNumberWithComma(snapshot.data[0].etfHighPrice),
                                                                 textAlign:
                                                                 TextAlign
                                                                     .end,
@@ -720,7 +776,7 @@ class _DibrEtfStockInfoPageState extends State<DibrEtfStockInfoPage> {
                                                                     fontWeight:
                                                                     FontWeight
                                                                         .bold,
-                                                                    fontSize: 10,
+                                                                    fontSize: 11,
                                                                     color: Colors
                                                                         .black),
                                                               ),
@@ -729,15 +785,15 @@ class _DibrEtfStockInfoPageState extends State<DibrEtfStockInfoPage> {
                                                                 children: [
                                                                   Icon(
                                                                     getUpDownIcon(snapshot.data[0].etfUdRateRealByHigh),
-                                                                    size: 12,
+                                                                    size: 14,
                                                                     color: getColor(snapshot.data[0].etfUdRateRealByHigh),
                                                                   ),
                                                                   Text(
-                                                                    '${snapshot.data[0].etfUdRateRealByHigh}%[${snapshot.data[0].etfHighPrice - snapshot.data[0].etfBefClosePrice}] ',
+                                                                    '${snapshot.data[0].etfUdRateRealByHigh}%['+getNumberWithComma(snapshot.data[0].etfHighPrice - snapshot.data[0].etfBefClosePrice)+'] ',
                                                                     textAlign: TextAlign.end,
                                                                     style: TextStyle(
                                                                         fontWeight: FontWeight.bold,
-                                                                        fontSize: 10,
+                                                                        fontSize: 11,
                                                                         color: getColor(snapshot.data[0].etfUdRateRealByHigh)),
                                                                   ),
                                                                 ],
@@ -748,7 +804,7 @@ class _DibrEtfStockInfoPageState extends State<DibrEtfStockInfoPage> {
                                                                 fontWeight:
                                                                     FontWeight
                                                                         .bold,
-                                                                fontSize: 12,
+                                                                fontSize: 11,
                                                                 color: Colors
                                                                     .green)),
                                                         Column(
@@ -757,7 +813,7 @@ class _DibrEtfStockInfoPageState extends State<DibrEtfStockInfoPage> {
                                                                 .end,
                                                             children: [
                                                               Text(
-                                                                '${snapshot.data[0].etfLowPrice} ',
+                                                                getNumberWithComma(snapshot.data[0].etfLowPrice),
                                                                 textAlign:
                                                                 TextAlign
                                                                     .end,
@@ -765,7 +821,7 @@ class _DibrEtfStockInfoPageState extends State<DibrEtfStockInfoPage> {
                                                                     fontWeight:
                                                                     FontWeight
                                                                         .bold,
-                                                                    fontSize: 10,
+                                                                    fontSize: 11,
                                                                     color: Colors
                                                                         .black),
                                                               ),
@@ -774,15 +830,15 @@ class _DibrEtfStockInfoPageState extends State<DibrEtfStockInfoPage> {
                                                                 children: [
                                                                   Icon(
                                                                     getUpDownIcon(snapshot.data[0].etfUdRateRealByLow),
-                                                                    size: 12,
+                                                                    size: 14,
                                                                     color: getColor(snapshot.data[0].etfUdRateRealByLow),
                                                                   ),
                                                                   Text(
-                                                                    '${snapshot.data[0].etfUdRateRealByLow}%[${snapshot.data[0].etfLowPrice - snapshot.data[0].etfBefClosePrice}] ',
+                                                                    '${snapshot.data[0].etfUdRateRealByLow}%['+getNumberWithComma(snapshot.data[0].etfLowPrice - snapshot.data[0].etfBefClosePrice)+'] ',
                                                                     textAlign: TextAlign.end,
                                                                     style: TextStyle(
                                                                         fontWeight: FontWeight.bold,
-                                                                        fontSize: 10,
+                                                                        fontSize: 11,
                                                                         color: getColor(snapshot.data[0].etfUdRateRealByLow)),
                                                                   ),
                                                                 ],
@@ -790,8 +846,10 @@ class _DibrEtfStockInfoPageState extends State<DibrEtfStockInfoPage> {
                                                             ]),
                                                       ]),
                                                     ],
-                                                  ),
-                                                ]),Table(
+                                                  ),]),
+                                                ]),
+                                                  SizedBox(height: 10),
+                                                   Table(
                                                   // columnWidths: ,
                                                   border: TableBorder(
                                                     bottom: BorderSide(
@@ -823,102 +881,127 @@ class _DibrEtfStockInfoPageState extends State<DibrEtfStockInfoPage> {
                                                   ),
                                                   //defaultColumnWidth: FixedColumnWidth(60.0),
                                                   columnWidths: {
-                                                    0: FixedColumnWidth(90.0),
-                                                    1: FixedColumnWidth(90.0),
-                                                    2: FixedColumnWidth(80.0),
-                                                    3: FixedColumnWidth(100.0),
+                                                    0: FixedColumnWidth(75.0),
+                                                    1: FixedColumnWidth(80.0),
+                                                    2: FixedColumnWidth(220.0),
                                                   },
 
                                                   children: [
                                                     TableRow(children: [
-                                                      Text('  예약가(%):\n ',
+                                                      Text('  예약가(%): ',
                                                           style: TextStyle(
                                                               fontWeight:
                                                               FontWeight
                                                                   .bold,
-                                                              fontSize: 16,
+                                                              fontSize: 13,
                                                               color: Colors
                                                                   .teal)),
-                                                      Column(
-                                                          crossAxisAlignment:
-                                                          CrossAxisAlignment
-                                                              .end,
-                                                          children: [
-                                                            Text(
-                                                              '${snapshot.data[0].etfRsvBuyPrc} [${snapshot.data[0].etfRsvBuyRate}%]',
+                                                      Text(
+                                                        getNumberWithComma(snapshot.data[0].etfRsvBuyPrc),
+                                                        textAlign:
+                                                        TextAlign
+                                                            .end,
+                                                        style: TextStyle(
+                                                            fontWeight:
+                                                            FontWeight
+                                                                .bold,
+                                                            fontSize: 13,
+                                                            color: Colors
+                                                                .black),
+                                                      ),
+                                                      Row(
+                                                        mainAxisAlignment: MainAxisAlignment.start,
+                                                        children: [
+                                                          Text(
+                                                              '  ',
                                                               textAlign:
                                                               TextAlign
                                                                   .end,
                                                               style: TextStyle(
+                                                                  fontSize:
+                                                                  13,
                                                                   fontWeight:
                                                                   FontWeight
                                                                       .bold,
-                                                                  fontSize:
-                                                                  16,
                                                                   color: Colors
-                                                                      .black),
-                                                            ),
-                                                          ]),
-                                                      Text('  손절(%):\n ',
-                                                          style: TextStyle(
-                                                              fontWeight:
-                                                              FontWeight
-                                                                  .bold,
-                                                              fontSize: 16,
-                                                              color: Colors
-                                                                  .teal)),
-                                                      Row(
-                                                          mainAxisAlignment:
-                                                          MainAxisAlignment
-                                                              .end,
-                                                          children: [
-                                                            Text(
-                                                                '${_marketInfo.minusDecide1st} ',
-                                                                textAlign:
-                                                                TextAlign
-                                                                    .end,
-                                                                style: TextStyle(
-                                                                    fontSize:
-                                                                    16,
-                                                                    color: Colors
-                                                                        .black)),
-                                                          ]),
+                                                                      .black)),
+                                                          Icon(
+                                                            getUpDownIcon(snapshot.data[0].etfRsvBuyRate),
+                                                            size: 16,
+                                                            color: getColor(snapshot.data[0].etfRsvBuyRate),
+                                                          ),
+                                                          Text(
+                                                            '${snapshot.data[0].etfRsvBuyRate}%['+getNumberWithComma(snapshot.data[0].etfOpenPrice - snapshot.data[0].etfRsvBuyPrc)+'] ',
+                                                            textAlign: TextAlign.end,
+                                                            style: TextStyle(
+                                                                fontWeight: FontWeight.bold,
+                                                                fontSize: 14,
+                                                                color: getColor(snapshot.data[0].etfRsvBuyRate)),
+                                                          ),
+                                                        ],
+                                                      ),
                                                     ]),
                                                     TableRow(children: [
-                                                      Text('  체결여부:\n ',
+                                                      Text('  손절(%): ',
                                                           style: TextStyle(
                                                               fontWeight:
                                                               FontWeight
                                                                   .bold,
-                                                              fontSize: 16,
+                                                              fontSize: 13,
                                                               color: Colors
                                                                   .teal)),
-                                                      Column(
-                                                          crossAxisAlignment:
-                                                          CrossAxisAlignment
+                                                      Text(
+                                                          '${_marketInfo.minusDecide1st}% ',
+                                                          textAlign:
+                                                          TextAlign
                                                               .end,
-                                                          children: [
-                                                            Text(
-                                                              '${snapshot.data[0].etfStockName} ',
+                                                          style: TextStyle(
+                                                              fontSize:
+                                                              13,
+                                                              fontWeight:
+                                                              FontWeight
+                                                                  .bold,
+                                                              color: Colors
+                                                                  .black)),
+                                                      Row(
+                                                        mainAxisAlignment: MainAxisAlignment.start,
+                                                        children: [
+                                                          Text(
+                                                              '   체결여부: ',
                                                               textAlign:
                                                               TextAlign
-                                                                  .end,
+                                                                  .start,
                                                               style: TextStyle(
+                                                                  fontSize:
+                                                                  13,
                                                                   fontWeight:
                                                                   FontWeight
                                                                       .bold,
-                                                                  fontSize:
-                                                                  16,
                                                                   color: Colors
-                                                                      .black),
-                                                            ),
-                                                          ]),
-                                                      Text('  수익(%):\n ',
+                                                                      .teal)),
+                                                          Text(
+                                                              getYn(snapshot.data[0].etfTodayConclYn),
+                                                              textAlign:
+                                                              TextAlign
+                                                                  .start,
+                                                              style: TextStyle(
+                                                                  fontSize:
+                                                                  13,
+                                                                  fontWeight:
+                                                                  FontWeight
+                                                                      .bold,
+                                                                  color: Colors
+                                                                      .black)),
+                                                        ],
+                                                      ),
+                                                    ]),
+                                                    TableRow(children: [
+                                                      Text('  수익(%): ',
                                                           style: TextStyle(
                                                               fontWeight:
                                                               FontWeight
                                                                   .bold,
-                                                              fontSize: 16,
+                                                              fontSize: 13,
                                                               color: Colors
                                                                   .teal)),
                                                       Row(
@@ -926,16 +1009,60 @@ class _DibrEtfStockInfoPageState extends State<DibrEtfStockInfoPage> {
                                                           MainAxisAlignment
                                                               .end,
                                                           children: [
+                                                            Icon(
+                                                              getUpDownIcon(snapshot.data[0].etfTodayResultRate),
+                                                              size: 16,
+                                                              color: getColor(snapshot.data[0].etfTodayResultRate),
+                                                            ),
                                                             Text(
-                                                                '${snapshot.data[0].etfBefClosePrice} ',
+                                                                '${snapshot.data[0].etfTodayResultRate}% ',
                                                                 textAlign:
                                                                 TextAlign
                                                                     .end,
                                                                 style: TextStyle(
                                                                     fontSize:
-                                                                    16,
+                                                                    13,
+                                                                    fontWeight:
+                                                                    FontWeight
+                                                                        .bold,
+                                                                    color: getColor(snapshot.data[0].etfTodayResultRate))),
+                                                          ]),
+                                                      Row(
+                                                          mainAxisAlignment:
+                                                          MainAxisAlignment
+                                                              .start,
+                                                          children: [
+                                                            Text(' ',
+                                                                style: TextStyle(
+                                                                    fontWeight:
+                                                                    FontWeight
+                                                                        .bold,
                                                                     color: Colors
-                                                                        .black)),
+                                                                        .green)),
+                                                            Text(
+                                                                '['+getNumberWithComma(snapshot.data[0].etfTodayRevenuePrc) +']',
+                                                                textAlign:
+                                                                TextAlign
+                                                                    .start,
+                                                                style: TextStyle(
+                                                                    fontSize:
+                                                                    13,
+                                                                    fontWeight:
+                                                                    FontWeight
+                                                                        .bold,
+                                                                    color: getColor(snapshot.data[0].etfTodayResultRate))),
+                                                            Text(
+                                                                '(일일 1천만원 투자 시)',
+                                                                textAlign:
+                                                                TextAlign
+                                                                    .start,
+                                                                style: TextStyle(
+                                                                    fontSize:
+                                                                    11,
+                                                                    fontWeight:
+                                                                    FontWeight
+                                                                        .bold,
+                                                                    color: Colors.deepOrange)),
                                                           ]),
                                                     ]),
                                                     TableRow(children: [
@@ -944,36 +1071,23 @@ class _DibrEtfStockInfoPageState extends State<DibrEtfStockInfoPage> {
                                                               fontWeight:
                                                               FontWeight
                                                                   .bold,
-                                                              fontSize: 16,
+                                                              fontSize: 13,
                                                               color: Colors
                                                                   .teal)),
-                                                      Column(
-                                                          crossAxisAlignment:
-                                                          CrossAxisAlignment
-                                                              .end,
-                                                          children: [
-                                                            Text(
-                                                              '${snapshot.data[0].etfStockName} ',
-                                                              textAlign:
-                                                              TextAlign
-                                                                  .end,
-                                                              style: TextStyle(
-                                                                  fontWeight:
-                                                                  FontWeight
-                                                                      .bold,
-                                                                  fontSize:
-                                                                  16,
-                                                                  color: Colors
-                                                                      .black),
-                                                            ),
-                                                          ]),
-                                                      Text(' ',
-                                                          style: TextStyle(
-                                                              fontWeight:
-                                                              FontWeight
-                                                                  .bold,
-                                                              color: Colors
-                                                                  .green)),
+                                                      Text(
+                                                        '${snapshot.data[0].etfMonthAggregateRate} ',
+                                                        textAlign:
+                                                        TextAlign
+                                                            .end,
+                                                        style: TextStyle(
+                                                            fontWeight:
+                                                            FontWeight
+                                                                .bold,
+                                                            fontSize:
+                                                            13,
+                                                            color: Colors
+                                                                .black),
+                                                      ),
                                                       Text(' ',
                                                           style: TextStyle(
                                                               fontWeight:
@@ -984,10 +1098,11 @@ class _DibrEtfStockInfoPageState extends State<DibrEtfStockInfoPage> {
                                                     ]),
                                                   ],
                                                 ),]))))),
+                            SizedBox(height: 20),
                             Container(
                                 padding: EdgeInsets.fromLTRB(2, 2, 2, 0),
                                 height: 300,
-                                width: 430,
+                                width: 440,
                                 child: Card(
                                     elevation: 5,
                                     child: Padding(
@@ -1013,478 +1128,544 @@ class _DibrEtfStockInfoPageState extends State<DibrEtfStockInfoPage> {
                                                               .etfStockType),
                                                         ),
                                                       ),
-                                                      Table(
-                                                        // columnWidths: ,
-                                                        border: TableBorder(
-                                                          bottom: BorderSide(
-                                                            color: Colors.blueGrey,
-                                                            style:
-                                                            BorderStyle.solid,
-                                                            width: 1.0,
-                                                          ),
-                                                          horizontalInside:
-                                                          BorderSide(
-                                                            color: Colors.white,
-                                                            style:
-                                                            BorderStyle.solid,
-                                                            width: 1.0,
-                                                          ),
-                                                          left: BorderSide(
-                                                            style: BorderStyle.none,
-                                                          ),
-                                                          right: BorderSide(
-                                                            style: BorderStyle.none,
-                                                          ),
-                                                          top: BorderSide(
-                                                            style: BorderStyle.none,
-                                                          ),
-                                                          verticalInside:
-                                                          BorderSide(
-                                                            style: BorderStyle.none,
-                                                          ),
-                                                        ),
-                                                        //defaultColumnWidth: FixedColumnWidth(60.0),
-                                                        columnWidths: {
-                                                          0: FixedColumnWidth(50.0),
-                                                          1: FixedColumnWidth(100.0),
-                                                          2: FixedColumnWidth(55.0),
-                                                          3: FixedColumnWidth(60.0),
-                                                        },
-
-                                                        children: [
-                                                          TableRow(children: [
-                                                            Text('종목명:',
-                                                                style: TextStyle(
-                                                                    fontWeight:
-                                                                    FontWeight
-                                                                        .bold,
-                                                                    fontSize: 12,
-                                                                    color: Colors
-                                                                        .green)),
-                                                            Column(
-                                                                crossAxisAlignment:
-                                                                CrossAxisAlignment
-                                                                    .end,
-                                                                children: [
-                                                                  Text(
-                                                                    '${snapshot.data[1].etfStockName} ',
-                                                                    textAlign:
-                                                                    TextAlign
-                                                                        .end,
-                                                                    style: TextStyle(
-                                                                        fontWeight:
-                                                                        FontWeight
-                                                                            .bold,
-                                                                        fontSize:
-                                                                        10,
-                                                                        color: Colors
-                                                                            .black),
-                                                                  ),
-                                                                ]),
-                                                            Text('  기준가:',
-                                                                style: TextStyle(
-                                                                    fontWeight:
-                                                                    FontWeight
-                                                                        .bold,
-                                                                    fontSize: 12,
-                                                                    color: Colors
-                                                                        .green)),
+                                                      Column(
+                                                          crossAxisAlignment: CrossAxisAlignment.start,
+                                                          children: <Widget>[
                                                             Row(
-                                                                mainAxisAlignment:
-                                                                MainAxisAlignment
-                                                                    .end,
-                                                                children: [
+                                                              mainAxisAlignment:
+                                                              MainAxisAlignment.start,
+                                                              children: <Widget>[
+                                                                Text(
+                                                                  '\n ${snapshot.data[1].etfStockName} ',
+                                                                  textAlign:
+                                                                  TextAlign
+                                                                      .end,
+                                                                  style: TextStyle(
+                                                                      fontWeight:
+                                                                      FontWeight
+                                                                          .bold,
+                                                                      fontSize:
+                                                                      14,
+                                                                      color: Colors
+                                                                          .pinkAccent),
+                                                                ),
+                                                              ],
+                                                            ),
+                                                            Table(
+                                                              // columnWidths: ,
+                                                              border: TableBorder(
+                                                                bottom: BorderSide(
+                                                                  color: Colors.blueGrey,
+                                                                  style:
+                                                                  BorderStyle.solid,
+                                                                  width: 1.0,
+                                                                ),
+                                                                horizontalInside:
+                                                                BorderSide(
+                                                                  color: Colors.white,
+                                                                  style:
+                                                                  BorderStyle.solid,
+                                                                  width: 1.0,
+                                                                ),
+                                                                left: BorderSide(
+                                                                  style: BorderStyle.none,
+                                                                ),
+                                                                right: BorderSide(
+                                                                  style: BorderStyle.none,
+                                                                ),
+                                                                top: BorderSide(
+                                                                  style: BorderStyle.none,
+                                                                ),
+                                                                verticalInside:
+                                                                BorderSide(
+                                                                  style: BorderStyle.none,
+                                                                ),
+                                                              ),
+                                                              //defaultColumnWidth: FixedColumnWidth(60.0),
+                                                              columnWidths: {
+                                                                0: FixedColumnWidth(50.0),
+                                                                1: FixedColumnWidth(95.0),
+                                                                2: FixedColumnWidth(50.0),
+                                                                3: FixedColumnWidth(100.0),
+                                                              },
+
+                                                              children: [
+                                                                TableRow(children: [
+                                                                  Text('기준가:',
+                                                                      style: TextStyle(
+                                                                          fontWeight:
+                                                                          FontWeight
+                                                                              .bold,
+                                                                          fontSize: 11,
+                                                                          color: Colors
+                                                                              .green)),
                                                                   Text(
-                                                                      '${snapshot.data[1].etfBefClosePrice} ',
+                                                                      getNumberWithComma(snapshot.data[1].etfBefClosePrice),
                                                                       textAlign:
                                                                       TextAlign
                                                                           .end,
                                                                       style: TextStyle(
                                                                           fontSize:
-                                                                          10,
+                                                                          11,
+                                                                          fontWeight:
+                                                                          FontWeight
+                                                                              .bold,
+                                                                          color: Colors
+                                                                              .black)),
+                                                                  Text(' ',
+                                                                      style: TextStyle(
+                                                                          fontWeight:
+                                                                          FontWeight
+                                                                              .bold,
+                                                                          fontSize: 11,
+                                                                          color: Colors
+                                                                              .green)),
+                                                                  Text(' ',
+                                                                      style: TextStyle(
+                                                                          fontWeight:
+                                                                          FontWeight
+                                                                              .bold,
+                                                                          fontSize: 11,
                                                                           color: Colors
                                                                               .black)),
                                                                 ]),
-                                                          ]),
-                                                          TableRow(children: [
-                                                            Text('시가(%):\n ',
-                                                                style: TextStyle(
-                                                                    fontWeight:
-                                                                    FontWeight
-                                                                        .bold,
-                                                                    fontSize: 12,
-                                                                    color: Colors
-                                                                        .green)),
-                                                            Column(
-                                                                crossAxisAlignment:
-                                                                CrossAxisAlignment
-                                                                    .end,
-                                                                children: [
-                                                                  Text(
-                                                                    '${snapshot.data[1].etfOpenPrice} ',
-                                                                    textAlign:
-                                                                    TextAlign
-                                                                        .end,
-                                                                    style: TextStyle(
-                                                                        fontWeight:
-                                                                        FontWeight
-                                                                            .bold,
-                                                                        fontSize: 10,
-                                                                        color: Colors
-                                                                            .black),
-                                                                  ),
-                                                                  Row(
-                                                                    mainAxisAlignment: MainAxisAlignment.end,
-                                                                    children: [
-                                                                      Icon(
-                                                                        getUpDownIcon(snapshot.data[1].etfUdRateRealByOpen),
-                                                                        size: 12,
-                                                                        color: getColor(snapshot.data[1].etfUdRateRealByOpen),
-                                                                      ),
-                                                                      Text(
-                                                                        '${snapshot.data[1].etfUdRateRealByOpen}%[${snapshot.data[1].etfOpenPrice - snapshot.data[1].etfBefClosePrice}] ',
-                                                                        textAlign: TextAlign.end,
-                                                                        style: TextStyle(
-                                                                            fontWeight: FontWeight.bold,
-                                                                            fontSize: 10,
-                                                                            color: getColor(snapshot.data[1].etfUdRateRealByOpen)),
-                                                                      ),
-                                                                    ],
-                                                                  ),
+                                                                TableRow(children: [
+                                                                  Text('시가(%):\n ',
+                                                                      style: TextStyle(
+                                                                          fontWeight:
+                                                                          FontWeight
+                                                                              .bold,
+                                                                          fontSize: 11,
+                                                                          color: Colors
+                                                                              .green)),
+                                                                  Column(
+                                                                      crossAxisAlignment:
+                                                                      CrossAxisAlignment
+                                                                          .end,
+                                                                      children: [
+                                                                        Text(
+                                                                          getNumberWithComma(snapshot.data[1].etfOpenPrice),
+                                                                          textAlign:
+                                                                          TextAlign
+                                                                              .end,
+                                                                          style: TextStyle(
+                                                                              fontWeight:
+                                                                              FontWeight
+                                                                                  .bold,
+                                                                              fontSize: 11,
+                                                                              color: Colors
+                                                                                  .black),
+                                                                        ),
+                                                                        Row(
+                                                                          mainAxisAlignment: MainAxisAlignment.end,
+                                                                          children: [
+                                                                            Icon(
+                                                                              getUpDownIcon(snapshot.data[1].etfUdRateRealByOpen),
+                                                                              size: 14,
+                                                                              color: getColor(snapshot.data[1].etfUdRateRealByOpen),
+                                                                            ),
+                                                                            Text(
+                                                                              '${snapshot.data[1].etfUdRateRealByOpen}%['+getNumberWithComma(snapshot.data[1].etfOpenPrice - snapshot.data[1].etfBefClosePrice)+'] ',
+                                                                              textAlign: TextAlign.end,
+                                                                              style: TextStyle(
+                                                                                  fontWeight: FontWeight.bold,
+                                                                                  fontSize: 11,
+                                                                                  color: getColor(snapshot.data[1].etfUdRateRealByOpen)),
+                                                                            ),
+                                                                          ],
+                                                                        ),
+                                                                      ]),
+                                                                  Text('  종가(%):\n ',
+                                                                      style: TextStyle(
+                                                                          fontWeight:
+                                                                          FontWeight
+                                                                              .bold,
+                                                                          fontSize: 11,
+                                                                          color: Colors
+                                                                              .green)),
+                                                                  Column(
+                                                                      crossAxisAlignment:
+                                                                      CrossAxisAlignment
+                                                                          .end,
+                                                                      children: [
+                                                                        Text(
+                                                                          getNumberWithComma(snapshot.data[1].etfClosePrice),
+                                                                          textAlign:
+                                                                          TextAlign
+                                                                              .end,
+                                                                          style: TextStyle(
+                                                                              fontWeight:
+                                                                              FontWeight
+                                                                                  .bold,
+                                                                              fontSize: 11,
+                                                                              color: Colors
+                                                                                  .black),
+                                                                        ),
+                                                                        Row(
+                                                                          mainAxisAlignment: MainAxisAlignment.end,
+                                                                          children: [
+                                                                            Icon(
+                                                                              getUpDownIcon(snapshot.data[1].etfUdRateRealByClose),
+                                                                              size: 14,
+                                                                              color: getColor(snapshot.data[1].etfUdRateRealByClose),
+                                                                            ),
+                                                                            Text(
+                                                                              '${snapshot.data[1].etfUdRateRealByClose}%['+getNumberWithComma(snapshot.data[1].etfClosePrice - snapshot.data[1].etfBefClosePrice)+'] ',
+                                                                              textAlign: TextAlign.end,
+                                                                              style: TextStyle(
+                                                                                  fontWeight: FontWeight.bold,
+                                                                                  fontSize: 11,
+                                                                                  color: getColor(snapshot.data[1].etfUdRateRealByClose)),
+                                                                            ),
+                                                                          ],
+                                                                        ),
+                                                                      ]),
                                                                 ]),
-                                                            Text('  종가(%):\n ',
-                                                                style: TextStyle(
-                                                                    fontWeight:
-                                                                    FontWeight
-                                                                        .bold,
-                                                                    fontSize: 10,
-                                                                    color: Colors
-                                                                        .green)),
-                                                            Column(
-                                                                crossAxisAlignment:
-                                                                CrossAxisAlignment
-                                                                    .end,
-                                                                children: [
-                                                                  Text(
-                                                                    '${snapshot.data[1].etfClosePrice} ',
-                                                                    textAlign:
-                                                                    TextAlign
-                                                                        .end,
-                                                                    style: TextStyle(
-                                                                        fontWeight:
-                                                                        FontWeight
-                                                                            .bold,
-                                                                        fontSize: 10,
-                                                                        color: Colors
-                                                                            .black),
-                                                                  ),
-                                                                  Row(
-                                                                    mainAxisAlignment: MainAxisAlignment.end,
-                                                                    children: [
-                                                                      Icon(
-                                                                        getUpDownIcon(snapshot.data[1].etfUdRateRealByClose),
-                                                                        size: 12,
-                                                                        color: getColor(snapshot.data[1].etfUdRateRealByClose),
-                                                                      ),
-                                                                      Text(
-                                                                        '${snapshot.data[1].etfUdRateRealByClose}%[${snapshot.data[1].etfClosePrice - snapshot.data[1].etfBefClosePrice}] ',
-                                                                        textAlign: TextAlign.end,
-                                                                        style: TextStyle(
-                                                                            fontWeight: FontWeight.bold,
-                                                                            fontSize: 10,
-                                                                            color: getColor(snapshot.data[1].etfUdRateRealByClose)),
-                                                                      ),
-                                                                    ],
-                                                                  ),
+                                                                TableRow(children: [
+                                                                  Text('고가(%):\n ',
+                                                                      style: TextStyle(
+                                                                          fontWeight:
+                                                                          FontWeight
+                                                                              .bold,
+                                                                          fontSize: 11,
+                                                                          color: Colors
+                                                                              .green)),
+                                                                  Column(
+                                                                      crossAxisAlignment:
+                                                                      CrossAxisAlignment
+                                                                          .end,
+                                                                      children: [
+                                                                        Text(
+                                                                          getNumberWithComma(snapshot.data[1].etfHighPrice),
+                                                                          textAlign:
+                                                                          TextAlign
+                                                                              .end,
+                                                                          style: TextStyle(
+                                                                              fontWeight:
+                                                                              FontWeight
+                                                                                  .bold,
+                                                                              fontSize: 11,
+                                                                              color: Colors
+                                                                                  .black),
+                                                                        ),
+                                                                        Row(
+                                                                          mainAxisAlignment: MainAxisAlignment.end,
+                                                                          children: [
+                                                                            Icon(
+                                                                              getUpDownIcon(snapshot.data[1].etfUdRateRealByHigh),
+                                                                              size: 14,
+                                                                              color: getColor(snapshot.data[1].etfUdRateRealByHigh),
+                                                                            ),
+                                                                            Text(
+                                                                              '${snapshot.data[1].etfUdRateRealByHigh}%['+getNumberWithComma(snapshot.data[1].etfHighPrice - snapshot.data[1].etfBefClosePrice)+'] ',
+                                                                              textAlign: TextAlign.end,
+                                                                              style: TextStyle(
+                                                                                  fontWeight: FontWeight.bold,
+                                                                                  fontSize: 11,
+                                                                                  color: getColor(snapshot.data[1].etfUdRateRealByHigh)),
+                                                                            ),
+                                                                          ],
+                                                                        ),
+                                                                      ]),
+                                                                  Text('  저가(%):\n ',
+                                                                      style: TextStyle(
+                                                                          fontWeight:
+                                                                          FontWeight
+                                                                              .bold,
+                                                                          fontSize: 11,
+                                                                          color: Colors
+                                                                              .green)),
+                                                                  Column(
+                                                                      crossAxisAlignment:
+                                                                      CrossAxisAlignment
+                                                                          .end,
+                                                                      children: [
+                                                                        Text(
+                                                                          getNumberWithComma(snapshot.data[1].etfLowPrice),
+                                                                          textAlign:
+                                                                          TextAlign
+                                                                              .end,
+                                                                          style: TextStyle(
+                                                                              fontWeight:
+                                                                              FontWeight
+                                                                                  .bold,
+                                                                              fontSize: 11,
+                                                                              color: Colors
+                                                                                  .black),
+                                                                        ),
+                                                                        Row(
+                                                                          mainAxisAlignment: MainAxisAlignment.end,
+                                                                          children: [
+                                                                            Icon(
+                                                                              getUpDownIcon(snapshot.data[1].etfUdRateRealByLow),
+                                                                              size: 14,
+                                                                              color: getColor(snapshot.data[1].etfUdRateRealByLow),
+                                                                            ),
+                                                                            Text(
+                                                                              '${snapshot.data[1].etfUdRateRealByLow}%['+getNumberWithComma(snapshot.data[1].etfLowPrice - snapshot.data[1].etfBefClosePrice)+'] ',
+                                                                              textAlign: TextAlign.end,
+                                                                              style: TextStyle(
+                                                                                  fontWeight: FontWeight.bold,
+                                                                                  fontSize: 11,
+                                                                                  color: getColor(snapshot.data[1].etfUdRateRealByLow)),
+                                                                            ),
+                                                                          ],
+                                                                        ),
+                                                                      ]),
                                                                 ]),
-                                                          ]),
-                                                          TableRow(children: [
-                                                            Text('고가(%):\n ',
-                                                                style: TextStyle(
-                                                                    fontWeight:
-                                                                    FontWeight
-                                                                        .bold,
-                                                                    fontSize: 12,
-                                                                    color: Colors
-                                                                        .green)),
-                                                            Column(
-                                                                crossAxisAlignment:
-                                                                CrossAxisAlignment
-                                                                    .end,
-                                                                children: [
-                                                                  Text(
-                                                                    '${snapshot.data[1].etfHighPrice} ',
-                                                                    textAlign:
-                                                                    TextAlign
-                                                                        .end,
-                                                                    style: TextStyle(
-                                                                        fontWeight:
-                                                                        FontWeight
-                                                                            .bold,
-                                                                        fontSize: 10,
-                                                                        color: Colors
-                                                                            .black),
-                                                                  ),
-                                                                  Row(
-                                                                    mainAxisAlignment: MainAxisAlignment.end,
-                                                                    children: [
-                                                                      Icon(
-                                                                        getUpDownIcon(snapshot.data[1].etfUdRateRealByHigh),
-                                                                        size: 12,
-                                                                        color: getColor(snapshot.data[1].etfUdRateRealByHigh),
-                                                                      ),
-                                                                      Text(
-                                                                        '${snapshot.data[1].etfUdRateRealByHigh}%[${snapshot.data[1].etfHighPrice - snapshot.data[1].etfBefClosePrice}] ',
-                                                                        textAlign: TextAlign.end,
-                                                                        style: TextStyle(
-                                                                            fontWeight: FontWeight.bold,
-                                                                            fontSize: 10,
-                                                                            color: getColor(snapshot.data[1].etfUdRateRealByHigh)),
-                                                                      ),
-                                                                    ],
-                                                                  ),
-                                                                ]),
-                                                            Text('  저가(%):\n ',
-                                                                style: TextStyle(
-                                                                    fontWeight:
-                                                                    FontWeight
-                                                                        .bold,
-                                                                    fontSize: 12,
-                                                                    color: Colors
-                                                                        .green)),
-                                                            Column(
-                                                                crossAxisAlignment:
-                                                                CrossAxisAlignment
-                                                                    .end,
-                                                                children: [
-                                                                  Text(
-                                                                    '${snapshot.data[1].etfLowPrice} ',
-                                                                    textAlign:
-                                                                    TextAlign
-                                                                        .end,
-                                                                    style: TextStyle(
-                                                                        fontWeight:
-                                                                        FontWeight
-                                                                            .bold,
-                                                                        fontSize: 10,
-                                                                        color: Colors
-                                                                            .black),
-                                                                  ),
-                                                                  Row(
-                                                                    mainAxisAlignment: MainAxisAlignment.end,
-                                                                    children: [
-                                                                      Icon(
-                                                                        getUpDownIcon(snapshot.data[1].etfUdRateRealByLow),
-                                                                        size: 12,
-                                                                        color: getColor(snapshot.data[1].etfUdRateRealByLow),
-                                                                      ),
-                                                                      Text(
-                                                                        '${snapshot.data[1].etfUdRateRealByLow}%[${snapshot.data[1].etfLowPrice - snapshot.data[1].etfBefClosePrice}] ',
-                                                                        textAlign: TextAlign.end,
-                                                                        style: TextStyle(
-                                                                            fontWeight: FontWeight.bold,
-                                                                            fontSize: 10,
-                                                                            color: getColor(snapshot.data[1].etfUdRateRealByLow)),
-                                                                      ),
-                                                                    ],
-                                                                  ),
-                                                                ]),
-                                                          ]),
-                                                        ],
+                                                              ],
+                                                            ),]),
+                                                    ]),
+                                                  SizedBox(height: 10),
+                                                  Table(
+                                                    // columnWidths: ,
+                                                    border: TableBorder(
+                                                      bottom: BorderSide(
+                                                        color: Colors.blueGrey,
+                                                        style:
+                                                        BorderStyle.solid,
+                                                        width: 1.0,
                                                       ),
-                                                    ]),Table(
-                                                  // columnWidths: ,
-                                                  border: TableBorder(
-                                                    bottom: BorderSide(
-                                                      color: Colors.blueGrey,
-                                                      style:
-                                                      BorderStyle.solid,
-                                                      width: 1.0,
+                                                      horizontalInside:
+                                                      BorderSide(
+                                                        color: Colors.white,
+                                                        style:
+                                                        BorderStyle.solid,
+                                                        width: 1.0,
+                                                      ),
+                                                      left: BorderSide(
+                                                        style: BorderStyle.none,
+                                                      ),
+                                                      right: BorderSide(
+                                                        style: BorderStyle.none,
+                                                      ),
+                                                      top: BorderSide(
+                                                        style: BorderStyle.none,
+                                                      ),
+                                                      verticalInside:
+                                                      BorderSide(
+                                                        style: BorderStyle.none,
+                                                      ),
                                                     ),
-                                                    horizontalInside:
-                                                    BorderSide(
-                                                      color: Colors.white,
-                                                      style:
-                                                      BorderStyle.solid,
-                                                      width: 1.0,
-                                                    ),
-                                                    left: BorderSide(
-                                                      style: BorderStyle.none,
-                                                    ),
-                                                    right: BorderSide(
-                                                      style: BorderStyle.none,
-                                                    ),
-                                                    top: BorderSide(
-                                                      style: BorderStyle.none,
-                                                    ),
-                                                    verticalInside:
-                                                    BorderSide(
-                                                      style: BorderStyle.none,
-                                                    ),
-                                                  ),
-                                                  //defaultColumnWidth: FixedColumnWidth(60.0),
-                                                  columnWidths: {
-                                                    0: FixedColumnWidth(90.0),
-                                                    1: FixedColumnWidth(90.0),
-                                                    2: FixedColumnWidth(80.0),
-                                                    3: FixedColumnWidth(100.0),
-                                                  },
+                                                    //defaultColumnWidth: FixedColumnWidth(60.0),
+                                                    columnWidths: {
+                                                      0: FixedColumnWidth(75.0),
+                                                      1: FixedColumnWidth(80.0),
+                                                      2: FixedColumnWidth(220.0),
+                                                    },
 
-                                                  children: [
-                                                    TableRow(children: [
-                                                      Text('  예약가(%):\n ',
+                                                    children: [
+                                                      TableRow(children: [
+                                                        Text('  예약가(%): ',
+                                                            style: TextStyle(
+                                                                fontWeight:
+                                                                FontWeight
+                                                                    .bold,
+                                                                fontSize: 13,
+                                                                color: Colors
+                                                                    .teal)),
+                                                        Text(
+                                                          getNumberWithComma(snapshot.data[1].etfRsvBuyPrc),
+                                                          textAlign:
+                                                          TextAlign
+                                                              .end,
                                                           style: TextStyle(
                                                               fontWeight:
                                                               FontWeight
                                                                   .bold,
-                                                              fontSize: 16,
+                                                              fontSize: 13,
                                                               color: Colors
-                                                                  .teal)),
-                                                      Column(
-                                                          crossAxisAlignment:
-                                                          CrossAxisAlignment
-                                                              .end,
+                                                                  .black),
+                                                        ),
+                                                        Row(
+                                                          mainAxisAlignment: MainAxisAlignment.start,
                                                           children: [
                                                             Text(
-                                                              '${snapshot.data[1].etfRsvBuyPrc} [${snapshot.data[1].etfRsvBuyRate}%]',
-                                                              textAlign:
-                                                              TextAlign
-                                                                  .end,
-                                                              style: TextStyle(
-                                                                  fontWeight:
-                                                                  FontWeight
-                                                                      .bold,
-                                                                  fontSize:
-                                                                  16,
-                                                                  color: Colors
-                                                                      .black),
-                                                            ),
-                                                          ]),
-                                                      Text('  손절(%):\n ',
-                                                          style: TextStyle(
-                                                              fontWeight:
-                                                              FontWeight
-                                                                  .bold,
-                                                              fontSize: 16,
-                                                              color: Colors
-                                                                  .teal)),
-                                                      Row(
-                                                          mainAxisAlignment:
-                                                          MainAxisAlignment
-                                                              .end,
-                                                          children: [
-                                                            Text(
-                                                                '${_marketInfo.minusDecide2nd} ',
+                                                                '  ',
                                                                 textAlign:
                                                                 TextAlign
                                                                     .end,
                                                                 style: TextStyle(
                                                                     fontSize:
-                                                                    16,
+                                                                    13,
+                                                                    fontWeight:
+                                                                    FontWeight
+                                                                        .bold,
                                                                     color: Colors
                                                                         .black)),
-                                                          ]),
-                                                    ]),
-                                                    TableRow(children: [
-                                                      Text('  체결여부:\n ',
-                                                          style: TextStyle(
-                                                              fontWeight:
-                                                              FontWeight
-                                                                  .bold,
-                                                              fontSize: 16,
-                                                              color: Colors
-                                                                  .teal)),
-                                                      Column(
-                                                          crossAxisAlignment:
-                                                          CrossAxisAlignment
-                                                              .end,
-                                                          children: [
-                                                            Text(
-                                                              '${snapshot.data[1].etfStockName} ',
-                                                              textAlign:
-                                                              TextAlign
-                                                                  .end,
-                                                              style: TextStyle(
-                                                                  fontWeight:
-                                                                  FontWeight
-                                                                      .bold,
-                                                                  fontSize:
-                                                                  16,
-                                                                  color: Colors
-                                                                      .black),
+                                                            Icon(
+                                                              getUpDownIcon(snapshot.data[1].etfRsvBuyRate),
+                                                              size: 16,
+                                                              color: getColor(snapshot.data[1].etfRsvBuyRate),
                                                             ),
-                                                          ]),
-                                                      Text('  수익(%):\n ',
-                                                          style: TextStyle(
-                                                              fontWeight:
-                                                              FontWeight
-                                                                  .bold,
-                                                              fontSize: 16,
-                                                              color: Colors
-                                                                  .teal)),
-                                                      Row(
-                                                          mainAxisAlignment:
-                                                          MainAxisAlignment
-                                                              .end,
+                                                            Text(
+                                                              '${snapshot.data[1].etfRsvBuyRate}%['+getNumberWithComma(snapshot.data[1].etfOpenPrice - snapshot.data[1].etfRsvBuyPrc)+'] ',
+                                                              textAlign: TextAlign.end,
+                                                              style: TextStyle(
+                                                                  fontWeight: FontWeight.bold,
+                                                                  fontSize: 14,
+                                                                  color: getColor(snapshot.data[1].etfRsvBuyRate)),
+                                                            ),
+                                                          ],
+                                                        ),
+                                                      ]),
+                                                      TableRow(children: [
+                                                        Text('  손절(%): ',
+                                                            style: TextStyle(
+                                                                fontWeight:
+                                                                FontWeight
+                                                                    .bold,
+                                                                fontSize: 13,
+                                                                color: Colors
+                                                                    .teal)),
+                                                        Text(
+                                                            '${_marketInfo.minusDecide2nd}% ',
+                                                            textAlign:
+                                                            TextAlign
+                                                                .end,
+                                                            style: TextStyle(
+                                                                fontSize:
+                                                                13,
+                                                                fontWeight:
+                                                                FontWeight
+                                                                    .bold,
+                                                                color: Colors
+                                                                    .black)),
+                                                        Row(
+                                                          mainAxisAlignment: MainAxisAlignment.start,
                                                           children: [
                                                             Text(
-                                                                '${snapshot.data[1].etfBefClosePrice} ',
+                                                                '   체결여부: ',
                                                                 textAlign:
                                                                 TextAlign
-                                                                    .end,
+                                                                    .start,
                                                                 style: TextStyle(
                                                                     fontSize:
-                                                                    16,
+                                                                    13,
+                                                                    fontWeight:
+                                                                    FontWeight
+                                                                        .bold,
+                                                                    color: Colors
+                                                                        .teal)),
+                                                            Text(
+                                                                getYn(snapshot.data[1].etfTodayConclYn),
+                                                                textAlign:
+                                                                TextAlign
+                                                                    .start,
+                                                                style: TextStyle(
+                                                                    fontSize:
+                                                                    13,
+                                                                    fontWeight:
+                                                                    FontWeight
+                                                                        .bold,
                                                                     color: Colors
                                                                         .black)),
-                                                          ]),
-                                                    ]),
-                                                    TableRow(children: [
-                                                      Text('  월누계(%):\n ',
-                                                          style: TextStyle(
-                                                              fontWeight:
-                                                              FontWeight
-                                                                  .bold,
-                                                              fontSize: 16,
-                                                              color: Colors
-                                                                  .teal)),
-                                                      Column(
-                                                          crossAxisAlignment:
-                                                          CrossAxisAlignment
+                                                          ],
+                                                        ),
+                                                      ]),
+                                                      TableRow(children: [
+                                                        Text('  수익(%): ',
+                                                            style: TextStyle(
+                                                                fontWeight:
+                                                                FontWeight
+                                                                    .bold,
+                                                                fontSize: 13,
+                                                                color: Colors
+                                                                    .teal)),
+                                                        Row(
+                                                            mainAxisAlignment:
+                                                            MainAxisAlignment
+                                                                .end,
+                                                            children: [
+                                                              Icon(
+                                                                getUpDownIcon(snapshot.data[1].etfTodayResultRate),
+                                                                size: 16,
+                                                                color: getColor(snapshot.data[1].etfTodayResultRate),
+                                                              ),
+                                                              Text(
+                                                                  '${snapshot.data[1].etfTodayResultRate}% ',
+                                                                  textAlign:
+                                                                  TextAlign
+                                                                      .end,
+                                                                  style: TextStyle(
+                                                                      fontSize:
+                                                                      13,
+                                                                      fontWeight:
+                                                                      FontWeight
+                                                                          .bold,
+                                                                      color: getColor(snapshot.data[1].etfTodayResultRate))),
+                                                            ]),
+                                                        Row(
+                                                            mainAxisAlignment:
+                                                            MainAxisAlignment
+                                                                .start,
+                                                            children: [
+                                                              Text(' ',
+                                                                  style: TextStyle(
+                                                                      fontWeight:
+                                                                      FontWeight
+                                                                          .bold,
+                                                                      color: Colors
+                                                                          .green)),
+                                                              Text(
+                                                                  '['+getNumberWithComma(snapshot.data[1].etfTodayRevenuePrc)+']',
+                                                                  textAlign:
+                                                                  TextAlign
+                                                                      .start,
+                                                                  style: TextStyle(
+                                                                      fontSize:
+                                                                      13,
+                                                                      fontWeight:
+                                                                      FontWeight
+                                                                          .bold,
+                                                                      color: getColor(snapshot.data[1].etfTodayResultRate))),
+                                                              Text(
+                                                                  '(일일 1천만원 투자 시)',
+                                                                  textAlign:
+                                                                  TextAlign
+                                                                      .start,
+                                                                  style: TextStyle(
+                                                                      fontSize:
+                                                                      11,
+                                                                      fontWeight:
+                                                                      FontWeight
+                                                                          .bold,
+                                                                      color: Colors.deepOrange)),
+                                                            ]),
+                                                      ]),
+                                                      TableRow(children: [
+                                                        Text('  월누계(%):\n ',
+                                                            style: TextStyle(
+                                                                fontWeight:
+                                                                FontWeight
+                                                                    .bold,
+                                                                fontSize: 13,
+                                                                color: Colors
+                                                                    .teal)),
+                                                        Text(
+                                                          '${snapshot.data[1].etfMonthAggregateRate} ',
+                                                          textAlign:
+                                                          TextAlign
                                                               .end,
-                                                          children: [
-                                                            Text(
-                                                              '${snapshot.data[1].etfStockName} ',
-                                                              textAlign:
-                                                              TextAlign
-                                                                  .end,
-                                                              style: TextStyle(
-                                                                  fontWeight:
-                                                                  FontWeight
-                                                                      .bold,
-                                                                  fontSize:
-                                                                  16,
-                                                                  color: Colors
-                                                                      .black),
-                                                            ),
-                                                          ]),
-                                                      Text(' ',
                                                           style: TextStyle(
                                                               fontWeight:
                                                               FontWeight
                                                                   .bold,
+                                                              fontSize:
+                                                              13,
                                                               color: Colors
-                                                                  .green)),
-                                                      Text(' ',
-                                                          style: TextStyle(
-                                                              fontWeight:
-                                                              FontWeight
-                                                                  .bold,
-                                                              color: Colors
-                                                                  .green)),
-                                                    ]),
-                                                  ],
-                                                ),]))))),
+                                                                  .black),
+                                                        ),
+                                                        Text(' ',
+                                                            style: TextStyle(
+                                                                fontWeight:
+                                                                FontWeight
+                                                                    .bold,
+                                                                color: Colors
+                                                                    .green)),
+                                                      ]),
+                                                    ],
+                                                  ),]))))),
                           ],
                         ),
                       ),

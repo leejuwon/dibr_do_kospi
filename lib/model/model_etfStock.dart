@@ -30,6 +30,7 @@ class EtfStockInfo {
   final double etfRsvBuyPrc;
   final String etfStockGroup;
   final String etfStockType;
+  final double etfTodayRevenuePrc;
 
 
   //final DocumentReference reference;
@@ -62,7 +63,8 @@ class EtfStockInfo {
     this.etfRsvBuyRate,
     this.etfRsvBuyPrc,
     this.etfStockGroup,
-    this.etfStockType
+    this.etfStockType,
+    this.etfTodayRevenuePrc
   });
 
   factory EtfStockInfo.fromJson(Map<String, dynamic> map){
@@ -95,7 +97,8 @@ class EtfStockInfo {
         etfRsvBuyRate: map['etfRsvBuyRate'] == null? 0.0 : map['etfRsvBuyRate'].toDouble(),
         etfRsvBuyPrc: map['etfRsvBuyPrc'] == null? 0.0 : map['etfRsvBuyPrc'].toDouble(),
         etfStockGroup: map['etfStockGroup'],
-        etfStockType: map['etfStockType']
+        etfStockType: map['etfStockType'],
+        etfTodayRevenuePrc: map['etfTodayRevenuePrc'] == null? 0.0 : map['etfTodayRevenuePrc'].toDouble()
 
   );
 }
@@ -103,10 +106,10 @@ class EtfStockInfo {
   factory EtfStockInfo.fromInitJson(){
     //, {this.reference})
     return EtfStockInfo(
-      etfStockDate: null,
-      etfBfStockDate: null,
-      etfStockId: null,
-      etfStockName: null,
+      etfStockDate: "",
+      etfBfStockDate: "",
+      etfStockId: "",
+      etfStockName: "",
       etfBefClosePrice: 0.0,
       etfOpenPrice: 0.0,
       etfHighPrice: 0.0,
@@ -130,7 +133,8 @@ class EtfStockInfo {
       etfRsvBuyRate: 0.0,
       etfRsvBuyPrc: 0.0,
       etfStockGroup: null,
-      etfStockType: null
+      etfStockType: null,
+      etfTodayRevenuePrc: 0.0
     );
   }
 
@@ -162,7 +166,8 @@ class EtfStockInfo {
     'etfRsvBuyRate': etfRsvBuyRate == null? 0.0 : etfRsvBuyRate.toDouble(),
     'etfRsvBuyPrc': etfRsvBuyPrc == null? 0.0 : etfRsvBuyPrc.toDouble(),
     'etfStockGroup': etfStockGroup,
-    'etfStockType': etfStockType
+    'etfStockType': etfStockType,
+    'etfTodayRevenuePrc': etfTodayRevenuePrc == null? 0.0 : etfTodayRevenuePrc.toDouble(),
   };
   /*MarketInfo.fromSnapshot(DocumentSnapshot snapshot)
       : this.fromMap(snapshot.data, reference: snapshot.reference);*/

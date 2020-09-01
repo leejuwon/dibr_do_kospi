@@ -87,9 +87,18 @@ class _DibrHistoryPageState extends State<DibrHistoryPage> {
     }
   }
 
+  String getNumberWithComma(pNum){
+    if (pNum == null || pNum == 'undefined') {
+      return "0.00 ";
+    }else{
+      return new NumberFormat('###,###,###,###.##').format(pNum).replaceAll(' ', '')+" ";
+    }
+
+  }
+
   String getSelectStock(pTp1, pTp2, pTp3) {
     if (pTp3 == 1) {
-      if (pTp1 == "R") {
+      if (pTp1 == "L") {
         if (pTp2 == "N") {
           return "Leverage";
         } else {
@@ -103,7 +112,7 @@ class _DibrHistoryPageState extends State<DibrHistoryPage> {
         }
       }
     } else {
-      if (pTp1 == "R") {
+      if (pTp1 == "L") {
         if (pTp2 == "N") {
           return "Inverse2X";
         } else {
@@ -383,7 +392,7 @@ class _DibrHistoryPageState extends State<DibrHistoryPage> {
                                                           child: Image.asset(
                                                               'images/usa.png',
                                                               height: 70,
-                                                              width: 60),
+                                                              width: 55),
                                                         ),
                                                       ),
                                                       Column(
@@ -411,7 +420,7 @@ class _DibrHistoryPageState extends State<DibrHistoryPage> {
                                                                               .centerRight,
                                                                       child:
                                                                           Text(
-                                                                        '${snapshot.data.snpStdPrice} ',
+                                                                            getNumberWithComma(snapshot.data.snpStdPrice),
                                                                         textAlign:
                                                                             TextAlign.end,
                                                                         style: TextStyle(
@@ -430,7 +439,7 @@ class _DibrHistoryPageState extends State<DibrHistoryPage> {
                                                                     MainAxisAlignment
                                                                         .spaceEvenly,
                                                                 children: [
-                                                                  Text('종가:',
+                                                                  Text(' 종가:',
                                                                       style: TextStyle(
                                                                           fontWeight: FontWeight
                                                                               .bold,
@@ -444,7 +453,7 @@ class _DibrHistoryPageState extends State<DibrHistoryPage> {
                                                                             .end,
                                                                     children: [
                                                                       Text(
-                                                                        '${snapshot.data.snpEndPrice} ',
+                                                                        getNumberWithComma(snapshot.data.snpEndPrice),
                                                                         textAlign:
                                                                             TextAlign.end,
                                                                         style: TextStyle(
@@ -479,7 +488,7 @@ class _DibrHistoryPageState extends State<DibrHistoryPage> {
                                                                             .snpUdRateRealByClose),
                                                                       ),
                                                                       Text(
-                                                                        '${snapshot.data.snpUdRateRealByClose}%[${snapshot.data.snpUdPrice}] ',
+                                                                        '${snapshot.data.snpUdRateRealByClose}%['+getNumberWithComma(snapshot.data.snpUdPrice)+'] ',
                                                                         textAlign:
                                                                             TextAlign.end,
                                                                         style: TextStyle(
@@ -520,7 +529,7 @@ class _DibrHistoryPageState extends State<DibrHistoryPage> {
                                                             getUpDownIcon(
                                                                 snapshot.data
                                                                     .snpScore),
-                                                            size: 20,
+                                                            size: 16,
                                                             color: getColor(
                                                                 snapshot.data
                                                                     .snpScore),
@@ -533,7 +542,7 @@ class _DibrHistoryPageState extends State<DibrHistoryPage> {
                                                                 fontWeight:
                                                                     FontWeight
                                                                         .bold,
-                                                                fontSize: 16,
+                                                                fontSize: 14,
                                                                 color: getColor(
                                                                     snapshot
                                                                         .data
@@ -576,7 +585,7 @@ class _DibrHistoryPageState extends State<DibrHistoryPage> {
                                                           child: Image.asset(
                                                               'images/euro.png',
                                                               height: 70,
-                                                              width: 60),
+                                                              width: 55),
                                                         ),
                                                       ),
                                                       Column(
@@ -604,7 +613,7 @@ class _DibrHistoryPageState extends State<DibrHistoryPage> {
                                                                               .centerRight,
                                                                       child:
                                                                           Text(
-                                                                        '${snapshot.data.eurStdPrice} ',
+                                                                            getNumberWithComma(snapshot.data.eurStdPrice),
                                                                         textAlign:
                                                                             TextAlign.end,
                                                                         style: TextStyle(
@@ -637,7 +646,7 @@ class _DibrHistoryPageState extends State<DibrHistoryPage> {
                                                                             .end,
                                                                     children: [
                                                                       Text(
-                                                                        '${snapshot.data.eurEndPrice} ',
+                                                                        getNumberWithComma(snapshot.data.eurEndPrice),
                                                                         textAlign:
                                                                             TextAlign.end,
                                                                         style: TextStyle(
@@ -672,7 +681,7 @@ class _DibrHistoryPageState extends State<DibrHistoryPage> {
                                                                             .eurUdRateRealByClose),
                                                                       ),
                                                                       Text(
-                                                                        '${snapshot.data.eurUdRateRealByClose}%[${snapshot.data.eurUdPrice}] ',
+                                                                        '${snapshot.data.eurUdRateRealByClose}%['+getNumberWithComma(snapshot.data.eurUdPrice)+'] ',
                                                                         textAlign:
                                                                             TextAlign.end,
                                                                         style: TextStyle(
@@ -712,7 +721,7 @@ class _DibrHistoryPageState extends State<DibrHistoryPage> {
                                                             getUpDownIcon(
                                                                 snapshot.data
                                                                     .eurScore),
-                                                            size: 20,
+                                                            size: 16,
                                                             color: getColor(
                                                                 snapshot.data
                                                                     .eurScore),
@@ -725,7 +734,7 @@ class _DibrHistoryPageState extends State<DibrHistoryPage> {
                                                                 fontWeight:
                                                                     FontWeight
                                                                         .bold,
-                                                                fontSize: 16,
+                                                                fontSize: 14,
                                                                 color: getColor(
                                                                     snapshot
                                                                         .data
@@ -800,7 +809,7 @@ class _DibrHistoryPageState extends State<DibrHistoryPage> {
                                                                               .centerRight,
                                                                       child:
                                                                           Text(
-                                                                        '${snapshot.data.wtiStdPrice} ',
+                                                                            getNumberWithComma(snapshot.data.wtiStdPrice),
                                                                         textAlign:
                                                                             TextAlign.end,
                                                                         style: TextStyle(
@@ -833,7 +842,7 @@ class _DibrHistoryPageState extends State<DibrHistoryPage> {
                                                                             .end,
                                                                     children: [
                                                                       Text(
-                                                                        '${snapshot.data.wtiEndPrice} ',
+                                                                        getNumberWithComma(snapshot.data.wtiEndPrice),
                                                                         textAlign:
                                                                             TextAlign.end,
                                                                         style: TextStyle(
@@ -868,7 +877,7 @@ class _DibrHistoryPageState extends State<DibrHistoryPage> {
                                                                             .wtiUdRateRealByClose),
                                                                       ),
                                                                       Text(
-                                                                        '${snapshot.data.wtiUdRateRealByClose}%[${snapshot.data.wtiUdPrice}] ',
+                                                                        '${snapshot.data.wtiUdRateRealByClose}%['+ getNumberWithComma(snapshot.data.wtiUdPrice)+'] ',
                                                                         textAlign:
                                                                             TextAlign.end,
                                                                         style: TextStyle(
@@ -908,7 +917,7 @@ class _DibrHistoryPageState extends State<DibrHistoryPage> {
                                                             getUpDownIcon(
                                                                 snapshot.data
                                                                     .wtiScore),
-                                                            size: 20,
+                                                            size: 16,
                                                             color: getColor(
                                                                 snapshot.data
                                                                     .wtiScore),
@@ -921,7 +930,7 @@ class _DibrHistoryPageState extends State<DibrHistoryPage> {
                                                                 fontWeight:
                                                                     FontWeight
                                                                         .bold,
-                                                                fontSize: 16,
+                                                                fontSize: 14,
                                                                 color: getColor(
                                                                     snapshot
                                                                         .data
@@ -992,7 +1001,7 @@ class _DibrHistoryPageState extends State<DibrHistoryPage> {
                                                                               .centerRight,
                                                                       child:
                                                                           Text(
-                                                                        '${snapshot.data.dubStdPrice} ',
+                                                                            getNumberWithComma(snapshot.data.dubStdPrice),
                                                                         textAlign:
                                                                             TextAlign.end,
                                                                         style: TextStyle(
@@ -1025,7 +1034,7 @@ class _DibrHistoryPageState extends State<DibrHistoryPage> {
                                                                             .end,
                                                                     children: [
                                                                       Text(
-                                                                        '${snapshot.data.dubEndPrice} ',
+                                                                        getNumberWithComma(snapshot.data.dubEndPrice),
                                                                         textAlign:
                                                                             TextAlign.end,
                                                                         style: TextStyle(
@@ -1060,7 +1069,7 @@ class _DibrHistoryPageState extends State<DibrHistoryPage> {
                                                                             .dubUdRateRealByClose),
                                                                       ),
                                                                       Text(
-                                                                        '${snapshot.data.dubUdRateRealByClose}%[${snapshot.data.dubUdPrice}] ',
+                                                                        '${snapshot.data.dubUdRateRealByClose}%['+getNumberWithComma(snapshot.data.dubUdPrice)+'] ',
                                                                         textAlign:
                                                                             TextAlign.end,
                                                                         style: TextStyle(
@@ -1100,7 +1109,7 @@ class _DibrHistoryPageState extends State<DibrHistoryPage> {
                                                             getUpDownIcon(
                                                                 snapshot.data
                                                                     .dubScore),
-                                                            size: 20,
+                                                            size: 16,
                                                             color: getColor(
                                                                 snapshot.data
                                                                     .dubScore),
@@ -1113,7 +1122,7 @@ class _DibrHistoryPageState extends State<DibrHistoryPage> {
                                                                 fontWeight:
                                                                     FontWeight
                                                                         .bold,
-                                                                fontSize: 16,
+                                                                fontSize: 14,
                                                                 color: getColor(
                                                                     snapshot
                                                                         .data
@@ -1188,7 +1197,7 @@ class _DibrHistoryPageState extends State<DibrHistoryPage> {
                                                                               .centerRight,
                                                                       child:
                                                                           Text(
-                                                                        '${snapshot.data.breStdPrice} ',
+                                                                            getNumberWithComma(snapshot.data.breStdPrice),
                                                                         textAlign:
                                                                             TextAlign.end,
                                                                         style: TextStyle(
@@ -1221,7 +1230,7 @@ class _DibrHistoryPageState extends State<DibrHistoryPage> {
                                                                             .end,
                                                                     children: [
                                                                       Text(
-                                                                        '${snapshot.data.breEndPrice} ',
+                                                                        getNumberWithComma(snapshot.data.breEndPrice),
                                                                         textAlign:
                                                                             TextAlign.end,
                                                                         style: TextStyle(
@@ -1256,7 +1265,7 @@ class _DibrHistoryPageState extends State<DibrHistoryPage> {
                                                                             .breUdRateRealByClose),
                                                                       ),
                                                                       Text(
-                                                                        '${snapshot.data.breUdRateRealByClose}%[${snapshot.data.breUdPrice}] ',
+                                                                        '${snapshot.data.breUdRateRealByClose}%['+getNumberWithComma(snapshot.data.breUdPrice)+'] ',
                                                                         textAlign:
                                                                             TextAlign.end,
                                                                         style: TextStyle(
@@ -1296,7 +1305,7 @@ class _DibrHistoryPageState extends State<DibrHistoryPage> {
                                                             getUpDownIcon(
                                                                 snapshot.data
                                                                     .breScore),
-                                                            size: 20,
+                                                            size: 16,
                                                             color: getColor(
                                                                 snapshot.data
                                                                     .breScore),
@@ -1309,7 +1318,7 @@ class _DibrHistoryPageState extends State<DibrHistoryPage> {
                                                                 fontWeight:
                                                                     FontWeight
                                                                         .bold,
-                                                                fontSize: 16,
+                                                                fontSize: 14,
                                                                 color: getColor(
                                                                     snapshot
                                                                         .data
@@ -1380,7 +1389,7 @@ class _DibrHistoryPageState extends State<DibrHistoryPage> {
                                                                               .centerRight,
                                                                       child:
                                                                           Text(
-                                                                        '${snapshot.data.bfStdRate} ',
+                                                                            getNumberWithComma(snapshot.data.bfStdRate),
                                                                         textAlign:
                                                                             TextAlign.end,
                                                                         style: TextStyle(
@@ -1413,7 +1422,7 @@ class _DibrHistoryPageState extends State<DibrHistoryPage> {
                                                                             .end,
                                                                     children: [
                                                                       Text(
-                                                                        '${snapshot.data.tdOpRate} ',
+                                                                        getNumberWithComma(snapshot.data.tdOpRate),
                                                                         textAlign:
                                                                             TextAlign.end,
                                                                         style: TextStyle(
@@ -1448,7 +1457,7 @@ class _DibrHistoryPageState extends State<DibrHistoryPage> {
                                                                             .excDiffRate),
                                                                       ),
                                                                       Text(
-                                                                        '${snapshot.data.excDiffRate}%[${snapshot.data.excDiffPrice}] ',
+                                                                        '${snapshot.data.excDiffRate}%['+getNumberWithComma(snapshot.data.excDiffPrice)+'] ',
                                                                         textAlign:
                                                                             TextAlign.end,
                                                                         style: TextStyle(
@@ -1488,7 +1497,7 @@ class _DibrHistoryPageState extends State<DibrHistoryPage> {
                                                             getUpDownIcon(snapshot
                                                                 .data
                                                                 .excScore1st),
-                                                            size: 20,
+                                                            size: 16,
                                                             color: getColor(
                                                                 snapshot.data
                                                                     .excScore1st),
@@ -1501,7 +1510,7 @@ class _DibrHistoryPageState extends State<DibrHistoryPage> {
                                                                 fontWeight:
                                                                     FontWeight
                                                                         .bold,
-                                                                fontSize: 16,
+                                                                fontSize: 14,
                                                                 color: getColor(
                                                                     snapshot
                                                                         .data
@@ -1552,17 +1561,23 @@ class _DibrHistoryPageState extends State<DibrHistoryPage> {
                         SizedBox(height: 10),
                         Container(
                           margin: EdgeInsets.all(10),
-                          child: Table(
+                child: Card(
+                elevation: 5,
+                child: Padding(
+                padding: EdgeInsets.all(5),
+                child: Padding(
+                padding: const EdgeInsets.only(left: 3, top: 5,right: 10),
+                child:  Table(
                             // columnWidths: ,
                             border: TableBorder(
                               bottom: BorderSide(
                                 color: Colors.blueGrey,
-                                style: BorderStyle.solid,
+                                style: BorderStyle.none,
                                 width: 1.0,
                               ),
                               horizontalInside: BorderSide(
                                 color: Colors.white,
-                                style: BorderStyle.solid,
+                                style: BorderStyle.none,
                                 width: 1.0,
                               ),
                               left: BorderSide(
@@ -1608,8 +1623,8 @@ class _DibrHistoryPageState extends State<DibrHistoryPage> {
                                     mainAxisAlignment: MainAxisAlignment.center,
                                     children: [
                                       Icon(
-                                        getIcon(snapshot.data.exRauTotScore),
-                                        size: 35,
+                                        getUpDownIcon(snapshot.data.exRauTotScore),
+                                        size: 24,
                                         color: getColor(
                                             snapshot.data.exRauTotScore),
                                       ),
@@ -1617,6 +1632,7 @@ class _DibrHistoryPageState extends State<DibrHistoryPage> {
                                           '${snapshot.data.exRauTotScore}[${snapshot.data.exRauTotScoreGrade}] ',
                                           textAlign: TextAlign.end,
                                           style: TextStyle(
+                                              fontSize: 18,
                                               color: getColor(snapshot
                                                   .data.exRauTotScore))),
                                     ]),
@@ -1624,8 +1640,8 @@ class _DibrHistoryPageState extends State<DibrHistoryPage> {
                                     mainAxisAlignment: MainAxisAlignment.center,
                                     children: [
                                       Icon(
-                                        getIcon(snapshot.data.excScore1st),
-                                        size: 35,
+                                        getUpDownIcon(snapshot.data.excScore1st),
+                                        size: 24,
                                         color:
                                             getColor(snapshot.data.excScore1st),
                                       ),
@@ -1634,12 +1650,13 @@ class _DibrHistoryPageState extends State<DibrHistoryPage> {
                                           '${snapshot.data.excScore1st}[${snapshot.data.excSetRngGrp}] ',
                                           textAlign: TextAlign.end,
                                           style: TextStyle(
+                                              fontSize: 18,
                                               color: getColor(
                                                   snapshot.data.excScore1st))),
                                     ]),
                               ]),
                             ],
-                          ),
+                          ),)))
                         ),
                         SizedBox(height: 10),
                         Stack(
@@ -1671,7 +1688,13 @@ class _DibrHistoryPageState extends State<DibrHistoryPage> {
                           ],
                         ),
                         SizedBox(height: 10),
-                        Table(
+                Card(
+                elevation: 5,
+                child: Padding(
+                padding: EdgeInsets.all(10),
+                child: Padding(
+                padding: const EdgeInsets.only(left: 3, top: 5),
+                child: Table(
                           // columnWidths: ,
                           border: TableBorder(
                             bottom: BorderSide(
@@ -1698,10 +1721,10 @@ class _DibrHistoryPageState extends State<DibrHistoryPage> {
                             ),
                           ),
                           columnWidths: {
-                            0: FractionColumnWidth(.20),
-                            1: FractionColumnWidth(.25),
+                            0: FractionColumnWidth(.22),
+                            1: FractionColumnWidth(.28),
                             2: FractionColumnWidth(.30),
-                            3: FractionColumnWidth(.25)
+                            3: FractionColumnWidth(.20)
                           },
                           children: [
                             TableRow(children: [
@@ -1781,7 +1804,7 @@ class _DibrHistoryPageState extends State<DibrHistoryPage> {
                                   mainAxisAlignment: MainAxisAlignment.end,
                                   children: [
                                     Icon(
-                                      getIcon(snapshot.data.buyRate1st),
+                                      getUpDownIcon(snapshot.data.buyRate1st),
                                       size: 25,
                                       color: getColor(snapshot.data.buyRate1st),
                                     ),
@@ -1795,7 +1818,7 @@ class _DibrHistoryPageState extends State<DibrHistoryPage> {
                                   mainAxisAlignment: MainAxisAlignment.end,
                                   children: [
                                     Icon(
-                                      getIcon(snapshot.data.minusDecide1st),
+                                      getUpDownIcon(snapshot.data.minusDecide1st),
                                       size: 25,
                                       color: getColor(
                                           snapshot.data.minusDecide1st),
@@ -1830,7 +1853,7 @@ class _DibrHistoryPageState extends State<DibrHistoryPage> {
                                   mainAxisAlignment: MainAxisAlignment.end,
                                   children: [
                                     Icon(
-                                      getIcon(snapshot.data.buyRate2nd),
+                                      getUpDownIcon(snapshot.data.buyRate2nd),
                                       size: 25,
                                       color: getColor(snapshot.data.buyRate2nd),
                                     ),
@@ -1844,7 +1867,7 @@ class _DibrHistoryPageState extends State<DibrHistoryPage> {
                                   mainAxisAlignment: MainAxisAlignment.end,
                                   children: [
                                     Icon(
-                                      getIcon(snapshot.data.minusDecide2nd),
+                                      getUpDownIcon(snapshot.data.minusDecide2nd),
                                       size: 25,
                                       color: getColor(
                                           snapshot.data.minusDecide2nd),
@@ -1857,7 +1880,7 @@ class _DibrHistoryPageState extends State<DibrHistoryPage> {
                                   ]),
                             ]),
                           ],
-                        ),
+                        ),))),
                         SizedBox(height: 5),
                         Align(
                             alignment: Alignment.bottomLeft,

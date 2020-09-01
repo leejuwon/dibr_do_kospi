@@ -87,6 +87,15 @@ class _DibrTodayPageState extends State<DibrTodayPage> {
     }
   }
 
+  String getNumberWithComma(pNum){
+    if (pNum == null || pNum == 'undefined') {
+      return "0.00 ";
+    }else{
+      return new NumberFormat('###,###,###,###.##').format(pNum).replaceAll(' ', '')+" ";
+    }
+
+  }
+
   Color getCalendarColor(pH, pM) {
     int intH = int.parse(pH);
     int intM = int.parse(pM);
@@ -107,7 +116,7 @@ class _DibrTodayPageState extends State<DibrTodayPage> {
 
   String getSelectStock(pTp1, pTp2, pTp3) {
     if (pTp3 == 1) {
-      if (pTp1 == "R") {
+      if (pTp1 == "L") {
         if (pTp2 == "N") {
           return "Leverage";
         } else {
@@ -121,7 +130,7 @@ class _DibrTodayPageState extends State<DibrTodayPage> {
         }
       }
     } else {
-      if (pTp1 == "R") {
+      if (pTp1 == "L") {
         if (pTp2 == "N") {
           return "Inverse2X";
         } else {
@@ -300,6 +309,7 @@ class _DibrTodayPageState extends State<DibrTodayPage> {
                                       padding: const EdgeInsets.all(2.0),
                                     ),
                                     Container(
+                                      height: 60,
                                       color: getTimeBackgroundColor(
                                           '$_selectedHh', '$_selectedMm'),
                                       child: Padding(
@@ -330,18 +340,6 @@ class _DibrTodayPageState extends State<DibrTodayPage> {
                                                         )),
                                                   ]),
                                               onTap: () {},
-                                            ),
-                                            IconButton(
-                                              icon: Icon(
-                                                Icons.calendar_today,
-                                                color: getCalendarColor(
-                                                    '$_selectedHh',
-                                                    '$_selectedMm'),
-                                              ),
-                                              iconSize: 25,
-                                              tooltip:
-                                                  'Tap to open date picker',
-                                              onPressed: () {},
                                             ),
                                           ],
                                         ),
@@ -389,531 +387,388 @@ class _DibrTodayPageState extends State<DibrTodayPage> {
                               Row(
                                 children: <Widget>[
                                   Container(
-                                    padding: EdgeInsets.fromLTRB(2,2,2,0),
-                                    height: 120,
+                                    padding: EdgeInsets.fromLTRB(2, 2, 2, 0),
+                                    height: 130,
                                     width: 195,
                                     child: Card(
                                       elevation: 5,
                                       child: Padding(
                                           padding: EdgeInsets.all(2),
                                           child: Padding(
-                                              padding: const EdgeInsets.only(left: 3, top: 5),
+                                              padding: const EdgeInsets.only(
+                                                  left: 3, top: 5),
                                               child: Column(
                                                 children: <Widget>[
                                                   Row(
-                                                    mainAxisAlignment: MainAxisAlignment.start,
+                                                    mainAxisAlignment:
+                                                    MainAxisAlignment.start,
                                                     children: <Widget>[
                                                       Padding(
-                                                        padding: const EdgeInsets.only(left: 3.0,right: 3.0),
+                                                        padding:
+                                                        const EdgeInsets
+                                                            .only(
+                                                            left: 3.0,
+                                                            right: 3.0),
                                                         child: Align(
-                                                          alignment: Alignment.centerLeft,
-                                                          child: Image.asset('images/snp_logo.png',height: 70,width: 60),
+                                                          alignment: Alignment
+                                                              .centerLeft,
+                                                          child: Image.asset(
+                                                              'images/usa.png',
+                                                              height: 70,
+                                                              width: 55),
                                                         ),
                                                       ),
                                                       Column(
-                                                          crossAxisAlignment: CrossAxisAlignment.end,
+                                                          crossAxisAlignment:
+                                                          CrossAxisAlignment
+                                                              .end,
                                                           children: <Widget>[
                                                             Container(
-                                                              child:
-                                                              Row(
-                                                                  mainAxisAlignment: MainAxisAlignment.start,
+                                                              child: Row(
+                                                                  mainAxisAlignment:
+                                                                  MainAxisAlignment
+                                                                      .start,
                                                                   children: [
                                                                     Text('기준가:',
                                                                         style: TextStyle(
-                                                                            fontWeight: FontWeight.bold,
-                                                                            fontSize: 11,
-                                                                            color: Colors.green)),
+                                                                            fontWeight: FontWeight
+                                                                                .bold,
+                                                                            fontSize:
+                                                                            11,
+                                                                            color:
+                                                                            Colors.green)),
                                                                     Align(
-                                                                      alignment: Alignment.centerRight,
-                                                                      child: Text(
-                                                                        '${snapshot.data.snpStdPrice} ',
-                                                                        textAlign: TextAlign.end,
+                                                                      alignment:
+                                                                      Alignment
+                                                                          .centerRight,
+                                                                      child:
+                                                                      Text(
+                                                                        getNumberWithComma(snapshot.data.snpStdPrice),
+                                                                        textAlign:
+                                                                        TextAlign.end,
                                                                         style: TextStyle(
-                                                                            fontWeight: FontWeight.bold,
-                                                                            fontSize: 11,
-                                                                            color: Colors.black),
+                                                                            fontWeight: FontWeight
+                                                                                .bold,
+                                                                            fontSize:
+                                                                            11,
+                                                                            color:
+                                                                            Colors.black),
                                                                       ),
                                                                     ),
                                                                   ]),
                                                             ),
                                                             Row(
-                                                                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                                                                mainAxisAlignment:
+                                                                MainAxisAlignment
+                                                                    .spaceEvenly,
                                                                 children: [
-                                                                  Text('종가:',
+                                                                  Text(' 종가:',
                                                                       style: TextStyle(
-                                                                          fontWeight: FontWeight.bold,
-                                                                          fontSize: 11,
-                                                                          color: Colors.green)),
+                                                                          fontWeight: FontWeight
+                                                                              .bold,
+                                                                          fontSize:
+                                                                          11,
+                                                                          color:
+                                                                          Colors.green)),
                                                                   Row(
-                                                                    mainAxisAlignment: MainAxisAlignment.end,
+                                                                    mainAxisAlignment:
+                                                                    MainAxisAlignment
+                                                                        .end,
                                                                     children: [
                                                                       Text(
-                                                                        '${snapshot.data.snpEndPrice} ',
-                                                                        textAlign: TextAlign.end,
+                                                                        getNumberWithComma(snapshot.data.snpEndPrice),
+                                                                        textAlign:
+                                                                        TextAlign.end,
                                                                         style: TextStyle(
-                                                                            fontWeight: FontWeight.bold,
-                                                                            fontSize: 11,
-                                                                            color: Colors.black),
+                                                                            fontWeight: FontWeight
+                                                                                .bold,
+                                                                            fontSize:
+                                                                            11,
+                                                                            color:
+                                                                            Colors.black),
                                                                       ),
                                                                     ],
                                                                   ),
-                                                                ]
-                                                            ),
+                                                                ]),
                                                             Row(
-                                                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                                                mainAxisAlignment:
+                                                                MainAxisAlignment
+                                                                    .spaceBetween,
                                                                 children: [
                                                                   Row(
-                                                                    mainAxisAlignment: MainAxisAlignment.end,
+                                                                    mainAxisAlignment:
+                                                                    MainAxisAlignment
+                                                                        .end,
                                                                     children: [
                                                                       Icon(
-                                                                        getUpDownIcon(snapshot.data.snpUdRateRealByClose),
-                                                                        size: 14,
-                                                                        color: getColor(snapshot.data.snpUdRateRealByClose),
+                                                                        getUpDownIcon(snapshot
+                                                                            .data
+                                                                            .snpUdRateRealByClose),
+                                                                        size:
+                                                                        14,
+                                                                        color: getColor(snapshot
+                                                                            .data
+                                                                            .snpUdRateRealByClose),
                                                                       ),
                                                                       Text(
-                                                                        '${snapshot.data.snpUdRateRealByClose}%[${snapshot.data.snpUdPrice}] ',
-                                                                        textAlign: TextAlign.end,
+                                                                        '${snapshot.data.snpUdRateRealByClose}%['+getNumberWithComma(snapshot.data.snpUdPrice)+'] ',
+                                                                        textAlign:
+                                                                        TextAlign.end,
                                                                         style: TextStyle(
-                                                                            fontWeight: FontWeight.bold,
-                                                                            fontSize: 11,
-                                                                            color: getColor(snapshot.data.snpUdRateRealByClose)),
+                                                                            fontWeight: FontWeight
+                                                                                .bold,
+                                                                            fontSize:
+                                                                            11,
+                                                                            color:
+                                                                            getColor(snapshot.data.snpUdRateRealByClose)),
                                                                       ),
                                                                     ],
                                                                   ),
-                                                                ]
-                                                            ),
+                                                                ]),
                                                           ]),
                                                     ],
                                                   ),
-                                                  Row(
-                                                    mainAxisAlignment: MainAxisAlignment.start,
-                                                    children: <Widget>[
-                                                      Text('편차 스코어:',
-                                                          style: TextStyle(
-                                                              fontWeight: FontWeight.bold,
-                                                              fontSize: 14,
-                                                              color: Colors.black87)),
-                                                      Row(
-                                                        mainAxisAlignment: MainAxisAlignment.end,
-                                                        children: [
-                                                          Icon(
-                                                            getUpDownIcon(snapshot.data.snpScore),
-                                                            size: 24,
-                                                            color: getColor(snapshot.data.snpScore),
-                                                          ),
-                                                          Text(
-                                                            '${snapshot.data.snpScore} ',
-                                                            textAlign: TextAlign.end,
-                                                            style: TextStyle(
-                                                                fontWeight: FontWeight.bold,
-                                                                fontSize: 18,
-                                                                color: getColor(snapshot.data.snpScore)),
+                                                  Padding(
+                                                      padding: const EdgeInsets.only(left: 5, right: 5),
+                                                      child:Row(
+                                                        mainAxisAlignment:
+                                                        MainAxisAlignment.spaceBetween,
+
+                                                        children: <Widget>[
+                                                          Text('S&P500 점수:',
+                                                              style: TextStyle(
+                                                                  fontWeight:
+                                                                  FontWeight
+                                                                      .bold,
+                                                                  fontSize: 13,
+                                                                  color: Colors
+                                                                      .black87)),
+                                                          Row(
+                                                            mainAxisAlignment:
+                                                            MainAxisAlignment
+                                                                .end,
+                                                            children: [
+                                                              Icon(
+                                                                getUpDownIcon(
+                                                                    snapshot.data
+                                                                        .snpScore),
+                                                                size: 16,
+                                                                color: getColor(
+                                                                    snapshot.data
+                                                                        .snpScore),
+                                                              ),
+                                                              Text(
+                                                                '${snapshot.data.snpScore} ',
+                                                                textAlign:
+                                                                TextAlign.end,
+                                                                style: TextStyle(
+                                                                    fontWeight:
+                                                                    FontWeight
+                                                                        .bold,
+                                                                    fontSize: 14,
+                                                                    color: getColor(
+                                                                        snapshot
+                                                                            .data
+                                                                            .snpScore)),
+                                                              ),
+                                                            ],
                                                           ),
                                                         ],
-                                                      ),
-                                                    ],
-                                                  )
-                                                ],
-                                              )
-                                          )
-                                      ),
+                                                      )
+                                                  )],
+                                              ))),
                                     ),
                                   ),
                                   Container(
-                                    padding: EdgeInsets.fromLTRB(2,2,2,0),
-                                    height: 120,
+                                    padding: EdgeInsets.fromLTRB(2, 2, 2, 0),
+                                    height: 130,
                                     width: 195,
                                     child: Card(
                                       elevation: 5,
                                       child: Padding(
                                           padding: EdgeInsets.all(2),
                                           child: Padding(
-                                              padding: const EdgeInsets.only(left: 3, top: 5),
+                                              padding: const EdgeInsets.only(
+                                                  left: 3, top: 5),
                                               child: Column(
                                                 children: <Widget>[
                                                   Row(
-                                                    mainAxisAlignment: MainAxisAlignment.start,
+                                                    mainAxisAlignment:
+                                                    MainAxisAlignment.start,
                                                     children: <Widget>[
                                                       Padding(
-                                                        padding: const EdgeInsets.only(left: 3.0,right: 3.0),
+                                                        padding:
+                                                        const EdgeInsets
+                                                            .only(
+                                                            left: 3.0,
+                                                            right: 3.0),
                                                         child: Align(
-                                                          alignment: Alignment.centerLeft,
-                                                          child: Image.asset('images/euro_logo.png',height: 70,width: 60),
+                                                          alignment: Alignment
+                                                              .centerLeft,
+                                                          child: Image.asset(
+                                                              'images/euro.png',
+                                                              height: 70,
+                                                              width: 55),
                                                         ),
                                                       ),
                                                       Column(
-                                                          crossAxisAlignment: CrossAxisAlignment.end,
+                                                          crossAxisAlignment:
+                                                          CrossAxisAlignment
+                                                              .end,
                                                           children: <Widget>[
                                                             Container(
-                                                              child:
-                                                              Row(
-                                                                  mainAxisAlignment: MainAxisAlignment.start,
+                                                              child: Row(
+                                                                  mainAxisAlignment:
+                                                                  MainAxisAlignment
+                                                                      .start,
                                                                   children: [
                                                                     Text('기준가:',
                                                                         style: TextStyle(
-                                                                            fontWeight: FontWeight.bold,
-                                                                            fontSize: 11,
-                                                                            color: Colors.green)),
+                                                                            fontWeight: FontWeight
+                                                                                .bold,
+                                                                            fontSize:
+                                                                            11,
+                                                                            color:
+                                                                            Colors.green)),
                                                                     Align(
-                                                                      alignment: Alignment.centerRight,
-                                                                      child: Text(
-                                                                        '${snapshot.data.eurStdPrice} ',
-                                                                        textAlign: TextAlign.end,
+                                                                      alignment:
+                                                                      Alignment
+                                                                          .centerRight,
+                                                                      child:
+                                                                      Text(
+                                                                        getNumberWithComma(snapshot.data.eurStdPrice),
+                                                                        textAlign:
+                                                                        TextAlign.end,
                                                                         style: TextStyle(
-                                                                            fontWeight: FontWeight.bold,
-                                                                            fontSize: 11,
-                                                                            color: Colors.black),
+                                                                            fontWeight: FontWeight
+                                                                                .bold,
+                                                                            fontSize:
+                                                                            11,
+                                                                            color:
+                                                                            Colors.black),
                                                                       ),
                                                                     ),
                                                                   ]),
                                                             ),
                                                             Row(
-                                                                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                                                                mainAxisAlignment:
+                                                                MainAxisAlignment
+                                                                    .spaceEvenly,
                                                                 children: [
                                                                   Text('종가:',
                                                                       style: TextStyle(
-                                                                          fontWeight: FontWeight.bold,
-                                                                          fontSize: 11,
-                                                                          color: Colors.green)),
+                                                                          fontWeight: FontWeight
+                                                                              .bold,
+                                                                          fontSize:
+                                                                          11,
+                                                                          color:
+                                                                          Colors.green)),
                                                                   Row(
-                                                                    mainAxisAlignment: MainAxisAlignment.end,
+                                                                    mainAxisAlignment:
+                                                                    MainAxisAlignment
+                                                                        .end,
                                                                     children: [
                                                                       Text(
-                                                                        '${snapshot.data.eurEndPrice} ',
-                                                                        textAlign: TextAlign.end,
+                                                                        getNumberWithComma(snapshot.data.eurEndPrice),
+                                                                        textAlign:
+                                                                        TextAlign.end,
                                                                         style: TextStyle(
-                                                                            fontWeight: FontWeight.bold,
-                                                                            fontSize: 11,
-                                                                            color: Colors.black),
+                                                                            fontWeight: FontWeight
+                                                                                .bold,
+                                                                            fontSize:
+                                                                            11,
+                                                                            color:
+                                                                            Colors.black),
                                                                       ),
                                                                     ],
                                                                   ),
-                                                                ]
-                                                            ),
+                                                                ]),
                                                             Row(
-                                                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                                                mainAxisAlignment:
+                                                                MainAxisAlignment
+                                                                    .spaceBetween,
                                                                 children: [
                                                                   Row(
-                                                                    mainAxisAlignment: MainAxisAlignment.end,
+                                                                    mainAxisAlignment:
+                                                                    MainAxisAlignment
+                                                                        .end,
                                                                     children: [
                                                                       Icon(
-                                                                        getUpDownIcon(snapshot.data.eurUdRateRealByClose),
-                                                                        size: 14,
-                                                                        color: getColor(snapshot.data.eurUdRateRealByClose),
+                                                                        getUpDownIcon(snapshot
+                                                                            .data
+                                                                            .eurUdRateRealByClose),
+                                                                        size:
+                                                                        14,
+                                                                        color: getColor(snapshot
+                                                                            .data
+                                                                            .eurUdRateRealByClose),
                                                                       ),
                                                                       Text(
-                                                                        '${snapshot.data.eurUdRateRealByClose}%[${snapshot.data.eurUdPrice}] ',
-                                                                        textAlign: TextAlign.end,
+                                                                        '${snapshot.data.eurUdRateRealByClose}%['+getNumberWithComma(snapshot.data.eurUdPrice)+'] ',
+                                                                        textAlign:
+                                                                        TextAlign.end,
                                                                         style: TextStyle(
-                                                                            fontWeight: FontWeight.bold,
-                                                                            fontSize: 11,
-                                                                            color: getColor(snapshot.data.eurUdRateRealByClose)),
+                                                                            fontWeight: FontWeight
+                                                                                .bold,
+                                                                            fontSize:
+                                                                            11,
+                                                                            color:
+                                                                            getColor(snapshot.data.eurUdRateRealByClose)),
                                                                       ),
                                                                     ],
                                                                   ),
-                                                                ]
-                                                            ),
+                                                                ]),
                                                           ]),
                                                     ],
                                                   ),
-                                                  Row(
-                                                    mainAxisAlignment: MainAxisAlignment.start,
-                                                    children: <Widget>[
-                                                      Text('편차 스코어:',
-                                                          style: TextStyle(
-                                                              fontWeight: FontWeight.bold,
-                                                              fontSize: 14,
-                                                              color: Colors.black87)),
-                                                      Row(
-                                                        mainAxisAlignment: MainAxisAlignment.end,
-                                                        children: [
-                                                          Icon(
-                                                            getUpDownIcon(snapshot.data.eurScore),
-                                                            size: 24,
-                                                            color: getColor(snapshot.data.eurScore),
-                                                          ),
-                                                          Text(
-                                                            '${snapshot.data.eurScore} ',
-                                                            textAlign: TextAlign.end,
+                                                  Padding(
+                                                    padding: const EdgeInsets.only(left: 5, right: 5),
+                                                    child:Row(
+                                                      mainAxisAlignment:
+                                                      MainAxisAlignment.spaceBetween,
+                                                      children: <Widget>[
+                                                        Text('EURO50 점수:',
                                                             style: TextStyle(
-                                                                fontWeight: FontWeight.bold,
-                                                                fontSize: 18,
-                                                                color: getColor(snapshot.data.eurScore)),
-                                                          ),
-                                                        ],
-                                                      ),
-                                                    ],
-                                                  ),
-                                                ],
-                                              )
-                                          )
-                                      ),
-                                    ),
-                                  ),
-                                ],
-                              ),
-                              Row(
-                                children: <Widget>[
-                                  Container(
-                                    padding: EdgeInsets.fromLTRB(2,2,2,0),
-                                    height: 120,
-                                    width: 195,
-                                    child: Card(
-                                      elevation: 5,
-                                      child: Padding(
-                                          padding: EdgeInsets.all(2),
-                                          child: Padding(
-                                              padding: const EdgeInsets.only(left: 3, top: 5),
-                                              child: Column(
-                                                children: <Widget>[
-                                                  Row(
-                                                    mainAxisAlignment: MainAxisAlignment.start,
-                                                    children: <Widget>[
-                                                      Padding(
-                                                        padding: const EdgeInsets.only(left: 3.0,right: 3.0),
-                                                        child: Align(
-                                                          alignment: Alignment.centerLeft,
-                                                          child: Image.asset('images/wtinew_logo.png',height: 70,width: 60),
+                                                                fontWeight:
+                                                                FontWeight
+                                                                    .bold,
+                                                                fontSize: 13,
+                                                                color: Colors
+                                                                    .black87)),
+                                                        Row(
+                                                          mainAxisAlignment:
+                                                          MainAxisAlignment
+                                                              .end,
+                                                          children: [
+                                                            Icon(
+                                                              getUpDownIcon(
+                                                                  snapshot.data
+                                                                      .eurScore),
+                                                              size: 16,
+                                                              color: getColor(
+                                                                  snapshot.data
+                                                                      .eurScore),
+                                                            ),
+                                                            Text(
+                                                              '${snapshot.data.eurScore} ',
+                                                              textAlign:
+                                                              TextAlign.end,
+                                                              style: TextStyle(
+                                                                  fontWeight:
+                                                                  FontWeight
+                                                                      .bold,
+                                                                  fontSize: 14,
+                                                                  color: getColor(
+                                                                      snapshot
+                                                                          .data
+                                                                          .eurScore)),
+                                                            ),
+                                                          ],
                                                         ),
-                                                      ),
-                                                      Column(
-                                                          crossAxisAlignment: CrossAxisAlignment.end,
-                                                          children: <Widget>[
-                                                            Container(
-                                                              child:
-                                                              Row(
-                                                                  mainAxisAlignment: MainAxisAlignment.start,
-                                                                  children: [
-                                                                    Text('기준가:',
-                                                                        style: TextStyle(
-                                                                            fontWeight: FontWeight.bold,
-                                                                            fontSize: 11,
-                                                                            color: Colors.green)),
-                                                                    Align(
-                                                                      alignment: Alignment.centerRight,
-                                                                      child: Text(
-                                                                        '${snapshot.data.wtiStdPrice} ',
-                                                                        textAlign: TextAlign.end,
-                                                                        style: TextStyle(
-                                                                            fontWeight: FontWeight.bold,
-                                                                            fontSize: 11,
-                                                                            color: Colors.black),
-                                                                      ),
-                                                                    ),
-                                                                  ]),
-                                                            ),
-                                                            Row(
-                                                                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                                                                children: [
-                                                                  Text('종가:',
-                                                                      style: TextStyle(
-                                                                          fontWeight: FontWeight.bold,
-                                                                          fontSize: 11,
-                                                                          color: Colors.green)),
-                                                                  Row(
-                                                                    mainAxisAlignment: MainAxisAlignment.end,
-                                                                    children: [
-                                                                      Text(
-                                                                        '${snapshot.data.wtiEndPrice} ',
-                                                                        textAlign: TextAlign.end,
-                                                                        style: TextStyle(
-                                                                            fontWeight: FontWeight.bold,
-                                                                            fontSize: 11,
-                                                                            color: Colors.black),
-                                                                      ),
-                                                                    ],
-                                                                  ),
-                                                                ]
-                                                            ),
-                                                            Row(
-                                                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                                                children: [
-                                                                  Row(
-                                                                    mainAxisAlignment: MainAxisAlignment.end,
-                                                                    children: [
-                                                                      Icon(
-                                                                        getUpDownIcon(snapshot.data.wtiUdRateRealByClose),
-                                                                        size: 14,
-                                                                        color: getColor(snapshot.data.wtiUdRateRealByClose),
-                                                                      ),
-                                                                      Text(
-                                                                        '${snapshot.data.wtiUdRateRealByClose}%[${snapshot.data.wtiUdPrice}] ',
-                                                                        textAlign: TextAlign.end,
-                                                                        style: TextStyle(
-                                                                            fontWeight: FontWeight.bold,
-                                                                            fontSize: 11,
-                                                                            color: getColor(snapshot.data.wtiUdRateRealByClose)),
-                                                                      ),
-                                                                    ],
-                                                                  ),
-                                                                ]
-                                                            ),
-                                                          ]),
-                                                    ],
-                                                  ),
-                                                  Row(
-                                                    mainAxisAlignment: MainAxisAlignment.start,
-                                                    children: <Widget>[
-                                                      Text('편차 스코어:',
-                                                          style: TextStyle(
-                                                              fontWeight: FontWeight.bold,
-                                                              fontSize: 14,
-                                                              color: Colors.black87)),
-                                                      Row(
-                                                        mainAxisAlignment: MainAxisAlignment.end,
-                                                        children: [
-                                                          Icon(
-                                                            getUpDownIcon(snapshot.data.wtiScore),
-                                                            size: 24,
-                                                            color: getColor(snapshot.data.wtiScore),
-                                                          ),
-                                                          Text(
-                                                            '${snapshot.data.wtiScore} ',
-                                                            textAlign: TextAlign.end,
-                                                            style: TextStyle(
-                                                                fontWeight: FontWeight.bold,
-                                                                fontSize: 18,
-                                                                color: getColor(snapshot.data.wtiScore)),
-                                                          ),
-                                                        ],
-                                                      ),
-                                                    ],
-                                                  )
-                                                ],
-                                              )
-                                          )
-                                      ),
-                                    ),
-                                  ),
-                                  Container(
-                                    padding: EdgeInsets.fromLTRB(2,2,2,0),
-                                    height: 120,
-                                    width: 195,
-                                    child: Card(
-                                      elevation: 5,
-                                      child: Padding(
-                                          padding: EdgeInsets.all(2),
-                                          child: Padding(
-                                              padding: const EdgeInsets.only(left: 3, top: 5),
-                                              child: Column(
-                                                children: <Widget>[
-                                                  Row(
-                                                    mainAxisAlignment: MainAxisAlignment.start,
-                                                    children: <Widget>[
-                                                      Padding(
-                                                        padding: const EdgeInsets.only(left: 3.0,right: 3.0),
-                                                        child: Align(
-                                                          alignment: Alignment.centerLeft,
-                                                          child: Image.asset('images/dubai_logo.png',height: 70,width: 60),
-                                                        ),
-                                                      ),
-                                                      Column(
-                                                          crossAxisAlignment: CrossAxisAlignment.end,
-                                                          children: <Widget>[
-                                                            Container(
-                                                              child:
-                                                              Row(
-                                                                  mainAxisAlignment: MainAxisAlignment.start,
-                                                                  children: [
-                                                                    Text('기준가:',
-                                                                        style: TextStyle(
-                                                                            fontWeight: FontWeight.bold,
-                                                                            fontSize: 11,
-                                                                            color: Colors.green)),
-                                                                    Align(
-                                                                      alignment: Alignment.centerRight,
-                                                                      child: Text(
-                                                                        '${snapshot.data.dubStdPrice} ',
-                                                                        textAlign: TextAlign.end,
-                                                                        style: TextStyle(
-                                                                            fontWeight: FontWeight.bold,
-                                                                            fontSize: 11,
-                                                                            color: Colors.black),
-                                                                      ),
-                                                                    ),
-                                                                  ]),
-                                                            ),
-                                                            Row(
-                                                                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                                                                children: [
-                                                                  Text('종가:',
-                                                                      style: TextStyle(
-                                                                          fontWeight: FontWeight.bold,
-                                                                          fontSize: 11,
-                                                                          color: Colors.green)),
-                                                                  Row(
-                                                                    mainAxisAlignment: MainAxisAlignment.end,
-                                                                    children: [
-                                                                      Text(
-                                                                        '${snapshot.data.dubEndPrice} ',
-                                                                        textAlign: TextAlign.end,
-                                                                        style: TextStyle(
-                                                                            fontWeight: FontWeight.bold,
-                                                                            fontSize: 11,
-                                                                            color: Colors.black),
-                                                                      ),
-                                                                    ],
-                                                                  ),
-                                                                ]
-                                                            ),
-                                                            Row(
-                                                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                                                children: [
-                                                                  Row(
-                                                                    mainAxisAlignment: MainAxisAlignment.end,
-                                                                    children: [
-                                                                      Icon(
-                                                                        getUpDownIcon(snapshot.data.dubUdRateRealByClose),
-                                                                        size: 14,
-                                                                        color: getColor(snapshot.data.dubUdRateRealByClose),
-                                                                      ),
-                                                                      Text(
-                                                                        '${snapshot.data.dubUdRateRealByClose}%[${snapshot.data.dubUdPrice}] ',
-                                                                        textAlign: TextAlign.end,
-                                                                        style: TextStyle(
-                                                                            fontWeight: FontWeight.bold,
-                                                                            fontSize: 11,
-                                                                            color: getColor(snapshot.data.dubUdRateRealByClose)),
-                                                                      ),
-                                                                    ],
-                                                                  ),
-                                                                ]
-                                                            ),
-                                                          ]),
-                                                    ],
-                                                  ),
-                                                  Row(
-                                                    mainAxisAlignment: MainAxisAlignment.start,
-                                                    children: <Widget>[
-                                                      Text('편차 스코어:',
-                                                          style: TextStyle(
-                                                              fontWeight: FontWeight.bold,
-                                                              fontSize: 14,
-                                                              color: Colors.black87)),
-                                                      Row(
-                                                        mainAxisAlignment: MainAxisAlignment.end,
-                                                        children: [
-                                                          Icon(
-                                                            getUpDownIcon(snapshot.data.dubScore),
-                                                            size: 24,
-                                                            color: getColor(snapshot.data.dubScore),
-                                                          ),
-                                                          Text(
-                                                            '${snapshot.data.dubScore} ',
-                                                            textAlign: TextAlign.end,
-                                                            style: TextStyle(
-                                                                fontWeight: FontWeight.bold,
-                                                                fontSize: 18,
-                                                                color: getColor(snapshot.data.dubScore)),
-                                                          ),
-                                                        ],
-                                                      ),
-                                                    ],
-                                                  ),
-                                                ],
-                                              )
-                                          )
-                                      ),
+                                                      ],
+                                                    ),
+                                                  )],
+                                              ))),
                                     ),
                                   ),
                                 ],
@@ -921,265 +776,775 @@ class _DibrTodayPageState extends State<DibrTodayPage> {
                               Row(
                                 children: <Widget>[
                                   Container(
-                                    padding: EdgeInsets.fromLTRB(2,2,2,0),
-                                    height: 120,
+                                    padding: EdgeInsets.fromLTRB(2, 2, 2, 0),
+                                    height: 130,
                                     width: 195,
                                     child: Card(
                                       elevation: 5,
                                       child: Padding(
                                           padding: EdgeInsets.all(2),
                                           child: Padding(
-                                              padding: const EdgeInsets.only(left: 3, top: 5),
+                                              padding: const EdgeInsets.only(
+                                                  left: 3, top: 5),
                                               child: Column(
                                                 children: <Widget>[
                                                   Row(
-                                                    mainAxisAlignment: MainAxisAlignment.start,
+                                                    mainAxisAlignment:
+                                                    MainAxisAlignment.start,
                                                     children: <Widget>[
                                                       Padding(
-                                                        padding: const EdgeInsets.only(left: 3.0,right: 3.0),
+                                                        padding:
+                                                        const EdgeInsets
+                                                            .only(
+                                                            left: 3.0,
+                                                            right: 3.0),
                                                         child: Align(
-                                                          alignment: Alignment.centerLeft,
-                                                          child: Image.asset('images/brent_logo.png',height: 70,width: 60),
+                                                          alignment: Alignment
+                                                              .centerLeft,
+                                                          child: Image.asset(
+                                                              'images/oil_logo.png',
+                                                              height: 70,
+                                                              width: 60),
                                                         ),
                                                       ),
                                                       Column(
-                                                          crossAxisAlignment: CrossAxisAlignment.end,
+                                                          crossAxisAlignment:
+                                                          CrossAxisAlignment
+                                                              .end,
                                                           children: <Widget>[
                                                             Container(
-                                                              child:
-                                                              Row(
-                                                                  mainAxisAlignment: MainAxisAlignment.start,
+                                                              child: Row(
+                                                                  mainAxisAlignment:
+                                                                  MainAxisAlignment
+                                                                      .start,
                                                                   children: [
                                                                     Text('기준가:',
                                                                         style: TextStyle(
-                                                                            fontWeight: FontWeight.bold,
-                                                                            fontSize: 11,
-                                                                            color: Colors.green)),
+                                                                            fontWeight: FontWeight
+                                                                                .bold,
+                                                                            fontSize:
+                                                                            11,
+                                                                            color:
+                                                                            Colors.green)),
                                                                     Align(
-                                                                      alignment: Alignment.centerRight,
-                                                                      child: Text(
-                                                                        '${snapshot.data.breStdPrice} ',
-                                                                        textAlign: TextAlign.end,
+                                                                      alignment:
+                                                                      Alignment
+                                                                          .centerRight,
+                                                                      child:
+                                                                      Text(
+                                                                        getNumberWithComma(snapshot.data.wtiStdPrice),
+                                                                        textAlign:
+                                                                        TextAlign.end,
                                                                         style: TextStyle(
-                                                                            fontWeight: FontWeight.bold,
-                                                                            fontSize: 11,
-                                                                            color: Colors.black),
+                                                                            fontWeight: FontWeight
+                                                                                .bold,
+                                                                            fontSize:
+                                                                            11,
+                                                                            color:
+                                                                            Colors.black),
                                                                       ),
                                                                     ),
                                                                   ]),
                                                             ),
                                                             Row(
-                                                                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                                                                mainAxisAlignment:
+                                                                MainAxisAlignment
+                                                                    .spaceEvenly,
                                                                 children: [
                                                                   Text('종가:',
                                                                       style: TextStyle(
-                                                                          fontWeight: FontWeight.bold,
-                                                                          fontSize: 11,
-                                                                          color: Colors.green)),
+                                                                          fontWeight: FontWeight
+                                                                              .bold,
+                                                                          fontSize:
+                                                                          11,
+                                                                          color:
+                                                                          Colors.green)),
                                                                   Row(
-                                                                    mainAxisAlignment: MainAxisAlignment.end,
+                                                                    mainAxisAlignment:
+                                                                    MainAxisAlignment
+                                                                        .end,
                                                                     children: [
                                                                       Text(
-                                                                        '${snapshot.data.breEndPrice} ',
-                                                                        textAlign: TextAlign.end,
+                                                                        getNumberWithComma(snapshot.data.wtiEndPrice),
+                                                                        textAlign:
+                                                                        TextAlign.end,
                                                                         style: TextStyle(
-                                                                            fontWeight: FontWeight.bold,
-                                                                            fontSize: 11,
-                                                                            color: Colors.black),
+                                                                            fontWeight: FontWeight
+                                                                                .bold,
+                                                                            fontSize:
+                                                                            11,
+                                                                            color:
+                                                                            Colors.black),
                                                                       ),
                                                                     ],
                                                                   ),
-                                                                ]
-                                                            ),
+                                                                ]),
                                                             Row(
-                                                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                                                mainAxisAlignment:
+                                                                MainAxisAlignment
+                                                                    .spaceBetween,
                                                                 children: [
                                                                   Row(
-                                                                    mainAxisAlignment: MainAxisAlignment.end,
+                                                                    mainAxisAlignment:
+                                                                    MainAxisAlignment
+                                                                        .end,
                                                                     children: [
                                                                       Icon(
-                                                                        getUpDownIcon(snapshot.data.breUdRateRealByClose),
-                                                                        size: 14,
-                                                                        color: getColor(snapshot.data.breUdRateRealByClose),
+                                                                        getUpDownIcon(snapshot
+                                                                            .data
+                                                                            .wtiUdRateRealByClose),
+                                                                        size:
+                                                                        14,
+                                                                        color: getColor(snapshot
+                                                                            .data
+                                                                            .wtiUdRateRealByClose),
                                                                       ),
                                                                       Text(
-                                                                        '${snapshot.data.breUdRateRealByClose}%[${snapshot.data.breUdPrice}] ',
-                                                                        textAlign: TextAlign.end,
+                                                                        '${snapshot.data.wtiUdRateRealByClose}%['+ getNumberWithComma(snapshot.data.wtiUdPrice)+'] ',
+                                                                        textAlign:
+                                                                        TextAlign.end,
                                                                         style: TextStyle(
-                                                                            fontWeight: FontWeight.bold,
-                                                                            fontSize: 11,
-                                                                            color: getColor(snapshot.data.breUdRateRealByClose)),
+                                                                            fontWeight: FontWeight
+                                                                                .bold,
+                                                                            fontSize:
+                                                                            11,
+                                                                            color:
+                                                                            getColor(snapshot.data.wtiUdRateRealByClose)),
                                                                       ),
                                                                     ],
                                                                   ),
-                                                                ]
-                                                            ),
+                                                                ]),
                                                           ]),
                                                     ],
                                                   ),
-                                                  Row(
-                                                    mainAxisAlignment: MainAxisAlignment.start,
-                                                    children: <Widget>[
-                                                      Text('편차 스코어:',
-                                                          style: TextStyle(
-                                                              fontWeight: FontWeight.bold,
-                                                              fontSize: 14,
-                                                              color: Colors.black87)),
-                                                      Row(
-                                                        mainAxisAlignment: MainAxisAlignment.end,
-                                                        children: [
-                                                          Icon(
-                                                            getUpDownIcon(snapshot.data.breScore),
-                                                            size: 24,
-                                                            color: getColor(snapshot.data.breScore),
-                                                          ),
-                                                          Text(
-                                                            '${snapshot.data.breScore} ',
-                                                            textAlign: TextAlign.end,
-                                                            style: TextStyle(
-                                                                fontWeight: FontWeight.bold,
-                                                                fontSize: 18,
-                                                                color: getColor(snapshot.data.breScore)),
+                                                  Padding(
+                                                      padding: const EdgeInsets.only(left: 5, right: 5),
+                                                      child:Row(
+                                                        mainAxisAlignment:
+                                                        MainAxisAlignment.spaceBetween,
+                                                        children: <Widget>[
+                                                          Text('WTI 점수:',
+                                                              style: TextStyle(
+                                                                  fontWeight:
+                                                                  FontWeight
+                                                                      .bold,
+                                                                  fontSize: 13,
+                                                                  color: Colors
+                                                                      .black87)),
+                                                          Row(
+                                                            mainAxisAlignment:
+                                                            MainAxisAlignment
+                                                                .end,
+                                                            children: [
+                                                              Icon(
+                                                                getUpDownIcon(
+                                                                    snapshot.data
+                                                                        .wtiScore),
+                                                                size: 16,
+                                                                color: getColor(
+                                                                    snapshot.data
+                                                                        .wtiScore),
+                                                              ),
+                                                              Text(
+                                                                '${snapshot.data.wtiScore} ',
+                                                                textAlign:
+                                                                TextAlign.end,
+                                                                style: TextStyle(
+                                                                    fontWeight:
+                                                                    FontWeight
+                                                                        .bold,
+                                                                    fontSize: 14,
+                                                                    color: getColor(
+                                                                        snapshot
+                                                                            .data
+                                                                            .wtiScore)),
+                                                              ),
+                                                            ],
                                                           ),
                                                         ],
-                                                      ),
-                                                    ],
-                                                  )
-                                                ],
-                                              )
-                                          )
-                                      ),
+                                                      )
+                                                  )],
+                                              ))),
                                     ),
                                   ),
                                   Container(
-                                    padding: EdgeInsets.fromLTRB(2,2,2,0),
-                                    height: 120,
+                                    padding: EdgeInsets.fromLTRB(2, 2, 2, 0),
+                                    height: 130,
                                     width: 195,
                                     child: Card(
                                       elevation: 5,
                                       child: Padding(
                                           padding: EdgeInsets.all(2),
                                           child: Padding(
-                                              padding: const EdgeInsets.only(left: 3, top: 5),
+                                              padding: const EdgeInsets.only(
+                                                  left: 3, top: 5),
                                               child: Column(
                                                 children: <Widget>[
                                                   Row(
-                                                    mainAxisAlignment: MainAxisAlignment.start,
+                                                    mainAxisAlignment:
+                                                    MainAxisAlignment.start,
                                                     children: <Widget>[
                                                       Padding(
-                                                        padding: const EdgeInsets.only(left: 3.0,right: 3.0),
+                                                        padding:
+                                                        const EdgeInsets
+                                                            .only(
+                                                            left: 3.0,
+                                                            right: 3.0),
                                                         child: Align(
-                                                          alignment: Alignment.centerLeft,
-                                                          child: Image.asset('images/excnew_logo.png',height: 70,width: 60),
+                                                          alignment: Alignment
+                                                              .centerLeft,
+                                                          child: Image.asset(
+                                                              'images/oil_logo.png',
+                                                              height: 70,
+                                                              width: 60),
                                                         ),
                                                       ),
                                                       Column(
-                                                          crossAxisAlignment: CrossAxisAlignment.end,
+                                                          crossAxisAlignment:
+                                                          CrossAxisAlignment
+                                                              .end,
                                                           children: <Widget>[
                                                             Container(
-                                                              child:
-                                                              Row(
-                                                                  mainAxisAlignment: MainAxisAlignment.start,
+                                                              child: Row(
+                                                                  mainAxisAlignment:
+                                                                  MainAxisAlignment
+                                                                      .start,
                                                                   children: [
                                                                     Text('기준가:',
                                                                         style: TextStyle(
-                                                                            fontWeight: FontWeight.bold,
-                                                                            fontSize: 11,
-                                                                            color: Colors.green)),
+                                                                            fontWeight: FontWeight
+                                                                                .bold,
+                                                                            fontSize:
+                                                                            11,
+                                                                            color:
+                                                                            Colors.green)),
                                                                     Align(
-                                                                      alignment: Alignment.centerRight,
-                                                                      child: Text(
-                                                                        '${snapshot.data.bfStdRate} ',
-                                                                        textAlign: TextAlign.end,
+                                                                      alignment:
+                                                                      Alignment
+                                                                          .centerRight,
+                                                                      child:
+                                                                      Text(
+                                                                        getNumberWithComma(snapshot.data.dubStdPrice),
+                                                                        textAlign:
+                                                                        TextAlign.end,
                                                                         style: TextStyle(
-                                                                            fontWeight: FontWeight.bold,
-                                                                            fontSize: 11,
-                                                                            color: Colors.black),
+                                                                            fontWeight: FontWeight
+                                                                                .bold,
+                                                                            fontSize:
+                                                                            11,
+                                                                            color:
+                                                                            Colors.black),
                                                                       ),
                                                                     ),
                                                                   ]),
                                                             ),
                                                             Row(
-                                                                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                                                                mainAxisAlignment:
+                                                                MainAxisAlignment
+                                                                    .spaceEvenly,
                                                                 children: [
                                                                   Text('종가:',
                                                                       style: TextStyle(
-                                                                          fontWeight: FontWeight.bold,
-                                                                          fontSize: 11,
-                                                                          color: Colors.green)),
+                                                                          fontWeight: FontWeight
+                                                                              .bold,
+                                                                          fontSize:
+                                                                          11,
+                                                                          color:
+                                                                          Colors.green)),
                                                                   Row(
-                                                                    mainAxisAlignment: MainAxisAlignment.end,
+                                                                    mainAxisAlignment:
+                                                                    MainAxisAlignment
+                                                                        .end,
                                                                     children: [
                                                                       Text(
-                                                                        '${snapshot.data.tdOpRate} ',
-                                                                        textAlign: TextAlign.end,
+                                                                        getNumberWithComma(snapshot.data.dubEndPrice),
+                                                                        textAlign:
+                                                                        TextAlign.end,
                                                                         style: TextStyle(
-                                                                            fontWeight: FontWeight.bold,
-                                                                            fontSize: 11,
-                                                                            color: Colors.black),
+                                                                            fontWeight: FontWeight
+                                                                                .bold,
+                                                                            fontSize:
+                                                                            11,
+                                                                            color:
+                                                                            Colors.black),
                                                                       ),
                                                                     ],
                                                                   ),
-                                                                ]
-                                                            ),
+                                                                ]),
                                                             Row(
-                                                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                                                mainAxisAlignment:
+                                                                MainAxisAlignment
+                                                                    .spaceBetween,
                                                                 children: [
                                                                   Row(
-                                                                    mainAxisAlignment: MainAxisAlignment.end,
+                                                                    mainAxisAlignment:
+                                                                    MainAxisAlignment
+                                                                        .end,
                                                                     children: [
                                                                       Icon(
-                                                                        getUpDownIcon(snapshot.data.excDiffRate),
-                                                                        size: 14,
-                                                                        color: getColor(snapshot.data.excDiffRate),
+                                                                        getUpDownIcon(snapshot
+                                                                            .data
+                                                                            .dubUdRateRealByClose),
+                                                                        size:
+                                                                        14,
+                                                                        color: getColor(snapshot
+                                                                            .data
+                                                                            .dubUdRateRealByClose),
                                                                       ),
                                                                       Text(
-                                                                        '${snapshot.data.excDiffRate}%[${snapshot.data.excDiffPrice}] ',
-                                                                        textAlign: TextAlign.end,
+                                                                        '${snapshot.data.dubUdRateRealByClose}%['+getNumberWithComma(snapshot.data.dubUdPrice)+'] ',
+                                                                        textAlign:
+                                                                        TextAlign.end,
                                                                         style: TextStyle(
-                                                                            fontWeight: FontWeight.bold,
-                                                                            fontSize: 11,
-                                                                            color: getColor(snapshot.data.excDiffRate)),
+                                                                            fontWeight: FontWeight
+                                                                                .bold,
+                                                                            fontSize:
+                                                                            11,
+                                                                            color:
+                                                                            getColor(snapshot.data.dubUdRateRealByClose)),
                                                                       ),
                                                                     ],
                                                                   ),
-                                                                ]
-                                                            ),
+                                                                ]),
                                                           ]),
                                                     ],
                                                   ),
-                                                  Row(
-                                                    mainAxisAlignment: MainAxisAlignment.start,
-                                                    children: <Widget>[
-                                                      Text('편차 스코어:',
-                                                          style: TextStyle(
-                                                              fontWeight: FontWeight.bold,
-                                                              fontSize: 14,
-                                                              color: Colors.black87)),
-                                                      Row(
-                                                        mainAxisAlignment: MainAxisAlignment.end,
-                                                        children: [
-                                                          Icon(
-                                                            getUpDownIcon(snapshot.data.excScore1st),
-                                                            size: 24,
-                                                            color: getColor(snapshot.data.excScore1st),
-                                                          ),
-                                                          Text(
-                                                            '${snapshot.data.excScore1st} ',
-                                                            textAlign: TextAlign.end,
+                                                  Padding(
+                                                    padding: const EdgeInsets.only(left: 5, right: 5),
+                                                    child:Row(
+                                                      mainAxisAlignment:
+                                                      MainAxisAlignment.spaceBetween,
+                                                      children: <Widget>[
+                                                        Text('Dubai 점수:',
                                                             style: TextStyle(
-                                                                fontWeight: FontWeight.bold,
-                                                                fontSize: 18,
-                                                                color: getColor(snapshot.data.excScore1st)),
-                                                          ),
-                                                        ],
+                                                                fontWeight:
+                                                                FontWeight
+                                                                    .bold,
+                                                                fontSize: 13,
+                                                                color: Colors
+                                                                    .black87)),
+                                                        Row(
+                                                          mainAxisAlignment:
+                                                          MainAxisAlignment
+                                                              .end,
+                                                          children: [
+                                                            Icon(
+                                                              getUpDownIcon(
+                                                                  snapshot.data
+                                                                      .dubScore),
+                                                              size: 16,
+                                                              color: getColor(
+                                                                  snapshot.data
+                                                                      .dubScore),
+                                                            ),
+                                                            Text(
+                                                              '${snapshot.data.dubScore} ',
+                                                              textAlign:
+                                                              TextAlign.end,
+                                                              style: TextStyle(
+                                                                  fontWeight:
+                                                                  FontWeight
+                                                                      .bold,
+                                                                  fontSize: 14,
+                                                                  color: getColor(
+                                                                      snapshot
+                                                                          .data
+                                                                          .dubScore)),
+                                                            ),
+                                                          ],
+                                                        ),
+                                                      ],
+                                                    ),
+                                                  )],
+                                              ))),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                              Row(
+                                children: <Widget>[
+                                  Container(
+                                    padding: EdgeInsets.fromLTRB(2, 2, 2, 0),
+                                    height: 130,
+                                    width: 195,
+                                    child: Card(
+                                      elevation: 5,
+                                      child: Padding(
+                                          padding: EdgeInsets.all(2),
+                                          child: Padding(
+                                              padding: const EdgeInsets.only(
+                                                  left: 3, top: 5),
+                                              child: Column(
+                                                children: <Widget>[
+                                                  Row(
+                                                    mainAxisAlignment:
+                                                    MainAxisAlignment.start,
+                                                    children: <Widget>[
+                                                      Padding(
+                                                        padding:
+                                                        const EdgeInsets
+                                                            .only(
+                                                            left: 3.0,
+                                                            right: 3.0),
+                                                        child: Align(
+                                                          alignment: Alignment
+                                                              .centerLeft,
+                                                          child: Image.asset(
+                                                              'images/oil_logo.png',
+                                                              height: 70,
+                                                              width: 60),
+                                                        ),
                                                       ),
+                                                      Column(
+                                                          crossAxisAlignment:
+                                                          CrossAxisAlignment
+                                                              .end,
+                                                          children: <Widget>[
+                                                            Container(
+                                                              child: Row(
+                                                                  mainAxisAlignment:
+                                                                  MainAxisAlignment
+                                                                      .start,
+                                                                  children: [
+                                                                    Text('기준가:',
+                                                                        style: TextStyle(
+                                                                            fontWeight: FontWeight
+                                                                                .bold,
+                                                                            fontSize:
+                                                                            11,
+                                                                            color:
+                                                                            Colors.green)),
+                                                                    Align(
+                                                                      alignment:
+                                                                      Alignment
+                                                                          .centerRight,
+                                                                      child:
+                                                                      Text(
+                                                                        getNumberWithComma(snapshot.data.breStdPrice),
+                                                                        textAlign:
+                                                                        TextAlign.end,
+                                                                        style: TextStyle(
+                                                                            fontWeight: FontWeight
+                                                                                .bold,
+                                                                            fontSize:
+                                                                            11,
+                                                                            color:
+                                                                            Colors.black),
+                                                                      ),
+                                                                    ),
+                                                                  ]),
+                                                            ),
+                                                            Row(
+                                                                mainAxisAlignment:
+                                                                MainAxisAlignment
+                                                                    .spaceEvenly,
+                                                                children: [
+                                                                  Text('종가:',
+                                                                      style: TextStyle(
+                                                                          fontWeight: FontWeight
+                                                                              .bold,
+                                                                          fontSize:
+                                                                          11,
+                                                                          color:
+                                                                          Colors.green)),
+                                                                  Row(
+                                                                    mainAxisAlignment:
+                                                                    MainAxisAlignment
+                                                                        .end,
+                                                                    children: [
+                                                                      Text(
+                                                                        getNumberWithComma(snapshot.data.breEndPrice),
+                                                                        textAlign:
+                                                                        TextAlign.end,
+                                                                        style: TextStyle(
+                                                                            fontWeight: FontWeight
+                                                                                .bold,
+                                                                            fontSize:
+                                                                            11,
+                                                                            color:
+                                                                            Colors.black),
+                                                                      ),
+                                                                    ],
+                                                                  ),
+                                                                ]),
+                                                            Row(
+                                                                mainAxisAlignment:
+                                                                MainAxisAlignment
+                                                                    .spaceBetween,
+                                                                children: [
+                                                                  Row(
+                                                                    mainAxisAlignment:
+                                                                    MainAxisAlignment
+                                                                        .end,
+                                                                    children: [
+                                                                      Icon(
+                                                                        getUpDownIcon(snapshot
+                                                                            .data
+                                                                            .breUdRateRealByClose),
+                                                                        size:
+                                                                        14,
+                                                                        color: getColor(snapshot
+                                                                            .data
+                                                                            .breUdRateRealByClose),
+                                                                      ),
+                                                                      Text(
+                                                                        '${snapshot.data.breUdRateRealByClose}%['+getNumberWithComma(snapshot.data.breUdPrice)+'] ',
+                                                                        textAlign:
+                                                                        TextAlign.end,
+                                                                        style: TextStyle(
+                                                                            fontWeight: FontWeight
+                                                                                .bold,
+                                                                            fontSize:
+                                                                            11,
+                                                                            color:
+                                                                            getColor(snapshot.data.breUdRateRealByClose)),
+                                                                      ),
+                                                                    ],
+                                                                  ),
+                                                                ]),
+                                                          ]),
                                                     ],
                                                   ),
-                                                ],
-                                              )
-                                          )
-                                      ),
+                                                  Padding(
+                                                      padding: const EdgeInsets.only(left: 5, right: 5),
+                                                      child:Row(
+                                                        mainAxisAlignment:
+                                                        MainAxisAlignment.spaceBetween,
+                                                        children: <Widget>[
+                                                          Text('Brent 점수:',
+                                                              style: TextStyle(
+                                                                  fontWeight:
+                                                                  FontWeight
+                                                                      .bold,
+                                                                  fontSize: 13,
+                                                                  color: Colors
+                                                                      .black87)),
+                                                          Row(
+                                                            mainAxisAlignment:
+                                                            MainAxisAlignment
+                                                                .end,
+                                                            children: [
+                                                              Icon(
+                                                                getUpDownIcon(
+                                                                    snapshot.data
+                                                                        .breScore),
+                                                                size: 16,
+                                                                color: getColor(
+                                                                    snapshot.data
+                                                                        .breScore),
+                                                              ),
+                                                              Text(
+                                                                '${snapshot.data.breScore} ',
+                                                                textAlign:
+                                                                TextAlign.end,
+                                                                style: TextStyle(
+                                                                    fontWeight:
+                                                                    FontWeight
+                                                                        .bold,
+                                                                    fontSize: 14,
+                                                                    color: getColor(
+                                                                        snapshot
+                                                                            .data
+                                                                            .breScore)),
+                                                              ),
+                                                            ],
+                                                          ),
+                                                        ],
+                                                      )
+                                                  )],
+                                              ))),
+                                    ),
+                                  ),
+                                  Container(
+                                    padding: EdgeInsets.fromLTRB(2, 2, 2, 0),
+                                    height: 130,
+                                    width: 195,
+                                    child: Card(
+                                      elevation: 5,
+                                      child: Padding(
+                                          padding: EdgeInsets.all(2),
+                                          child: Padding(
+                                              padding: const EdgeInsets.only(
+                                                  left: 3, top: 5),
+                                              child: Column(
+                                                children: <Widget>[
+                                                  Row(
+                                                    mainAxisAlignment:
+                                                    MainAxisAlignment.start,
+                                                    children: <Widget>[
+                                                      Padding(
+                                                        padding:
+                                                        const EdgeInsets
+                                                            .only(
+                                                            left: 3.0,
+                                                            right: 3.0),
+                                                        child: Align(
+                                                          alignment: Alignment
+                                                              .centerLeft,
+                                                          child: Image.asset(
+                                                              'images/excnew_logo.png',
+                                                              height: 70,
+                                                              width: 60),
+                                                        ),
+                                                      ),
+                                                      Column(
+                                                          crossAxisAlignment:
+                                                          CrossAxisAlignment
+                                                              .end,
+                                                          children: <Widget>[
+                                                            Container(
+                                                              child: Row(
+                                                                  mainAxisAlignment:
+                                                                  MainAxisAlignment
+                                                                      .start,
+                                                                  children: [
+                                                                    Text('기준가:',
+                                                                        style: TextStyle(
+                                                                            fontWeight: FontWeight
+                                                                                .bold,
+                                                                            fontSize:
+                                                                            11,
+                                                                            color:
+                                                                            Colors.green)),
+                                                                    Align(
+                                                                      alignment:
+                                                                      Alignment
+                                                                          .centerRight,
+                                                                      child:
+                                                                      Text(
+                                                                        getNumberWithComma(snapshot.data.bfStdRate),
+                                                                        textAlign:
+                                                                        TextAlign.end,
+                                                                        style: TextStyle(
+                                                                            fontWeight: FontWeight
+                                                                                .bold,
+                                                                            fontSize:
+                                                                            11,
+                                                                            color:
+                                                                            Colors.black),
+                                                                      ),
+                                                                    ),
+                                                                  ]),
+                                                            ),
+                                                            Row(
+                                                                mainAxisAlignment:
+                                                                MainAxisAlignment
+                                                                    .spaceEvenly,
+                                                                children: [
+                                                                  Text('종가:',
+                                                                      style: TextStyle(
+                                                                          fontWeight: FontWeight
+                                                                              .bold,
+                                                                          fontSize:
+                                                                          11,
+                                                                          color:
+                                                                          Colors.green)),
+                                                                  Row(
+                                                                    mainAxisAlignment:
+                                                                    MainAxisAlignment
+                                                                        .end,
+                                                                    children: [
+                                                                      Text(
+                                                                        getNumberWithComma(snapshot.data.tdOpRate),
+                                                                        textAlign:
+                                                                        TextAlign.end,
+                                                                        style: TextStyle(
+                                                                            fontWeight: FontWeight
+                                                                                .bold,
+                                                                            fontSize:
+                                                                            11,
+                                                                            color:
+                                                                            Colors.black),
+                                                                      ),
+                                                                    ],
+                                                                  ),
+                                                                ]),
+                                                            Row(
+                                                                mainAxisAlignment:
+                                                                MainAxisAlignment
+                                                                    .spaceBetween,
+                                                                children: [
+                                                                  Row(
+                                                                    mainAxisAlignment:
+                                                                    MainAxisAlignment
+                                                                        .end,
+                                                                    children: [
+                                                                      Icon(
+                                                                        getUpDownIcon(snapshot
+                                                                            .data
+                                                                            .excDiffRate),
+                                                                        size:
+                                                                        14,
+                                                                        color: getColor(snapshot
+                                                                            .data
+                                                                            .excDiffRate),
+                                                                      ),
+                                                                      Text(
+                                                                        '${snapshot.data.excDiffRate}%['+getNumberWithComma(snapshot.data.excDiffPrice)+'] ',
+                                                                        textAlign:
+                                                                        TextAlign.end,
+                                                                        style: TextStyle(
+                                                                            fontWeight: FontWeight
+                                                                                .bold,
+                                                                            fontSize:
+                                                                            11,
+                                                                            color:
+                                                                            getColor(snapshot.data.excDiffRate)),
+                                                                      ),
+                                                                    ],
+                                                                  ),
+                                                                ]),
+                                                          ]),
+                                                    ],
+                                                  ),
+                                                  Padding(
+                                                    padding: const EdgeInsets.only(left: 5, right: 5),
+                                                    child:Row(
+                                                      mainAxisAlignment:
+                                                      MainAxisAlignment.spaceBetween,
+                                                      children: <Widget>[
+                                                        Text('환율 점수:',
+                                                            style: TextStyle(
+                                                                fontWeight:
+                                                                FontWeight
+                                                                    .bold,
+                                                                fontSize: 13,
+                                                                color: Colors
+                                                                    .black87)),
+                                                        Row(
+                                                          mainAxisAlignment:
+                                                          MainAxisAlignment
+                                                              .end,
+                                                          children: [
+                                                            Icon(
+                                                              getUpDownIcon(snapshot
+                                                                  .data
+                                                                  .excScore1st),
+                                                              size: 16,
+                                                              color: getColor(
+                                                                  snapshot.data
+                                                                      .excScore1st),
+                                                            ),
+                                                            Text(
+                                                              '${snapshot.data.excScore1st} ',
+                                                              textAlign:
+                                                              TextAlign.end,
+                                                              style: TextStyle(
+                                                                  fontWeight:
+                                                                  FontWeight
+                                                                      .bold,
+                                                                  fontSize: 14,
+                                                                  color: getColor(
+                                                                      snapshot
+                                                                          .data
+                                                                          .excScore1st)),
+                                                            ),
+                                                          ],
+                                                        ),
+                                                      ],
+                                                    ),
+                                                  )],
+                                              ))),
                                     ),
                                   ),
                                 ],
@@ -1219,7 +1584,13 @@ class _DibrTodayPageState extends State<DibrTodayPage> {
                         SizedBox(height: 10),
                         Container(
                           margin: EdgeInsets.all(10),
-                          child: Table(
+                            child: Card(
+                              elevation: 5,
+                              child: Padding(
+                                padding: EdgeInsets.all(5),
+                                child: Padding(
+                                  padding: const EdgeInsets.only(left: 3, top: 5,right: 10),
+                                  child:   Table(
                             // columnWidths: ,
                             border: TableBorder(
                               bottom: BorderSide(
@@ -1275,8 +1646,8 @@ class _DibrTodayPageState extends State<DibrTodayPage> {
                                     mainAxisAlignment: MainAxisAlignment.center,
                                     children: [
                                       Icon(
-                                        getIcon(snapshot.data.exRauTotScore),
-                                        size: 35,
+                                        getUpDownIcon(snapshot.data.exRauTotScore),
+                                        size: 24,
                                         color: getColor(
                                             snapshot.data.exRauTotScore),
                                       ),
@@ -1284,6 +1655,7 @@ class _DibrTodayPageState extends State<DibrTodayPage> {
                                           '${snapshot.data.exRauTotScore}[${snapshot.data.exRauTotScoreGrade}] ',
                                           textAlign: TextAlign.end,
                                           style: TextStyle(
+                                              fontSize: 18,
                                               color: getColor(snapshot
                                                   .data.exRauTotScore))),
                                     ]),
@@ -1291,8 +1663,8 @@ class _DibrTodayPageState extends State<DibrTodayPage> {
                                     mainAxisAlignment: MainAxisAlignment.center,
                                     children: [
                                       Icon(
-                                        getIcon(snapshot.data.excScore1st),
-                                        size: 35,
+                                        getUpDownIcon(snapshot.data.excScore1st),
+                                        size: 24,
                                         color:
                                             getColor(snapshot.data.excScore1st),
                                       ),
@@ -1301,12 +1673,13 @@ class _DibrTodayPageState extends State<DibrTodayPage> {
                                           '${snapshot.data.excScore1st}[${snapshot.data.excSetRngGrp}] ',
                                           textAlign: TextAlign.end,
                                           style: TextStyle(
+                                              fontSize: 18,
                                               color: getColor(
                                                   snapshot.data.excScore1st))),
                                     ]),
                               ]),
                             ],
-                          ),
+                          ),)))
                         ),
                         SizedBox(height: 10),
                         Stack(
@@ -1334,20 +1707,17 @@ class _DibrTodayPageState extends State<DibrTodayPage> {
                                           fontStyle: FontStyle.normal,
                                           letterSpacing: 2.0,
                                           color: Colors.white)),
-                                  Text(' ',
-                                      style: TextStyle(
-                                          fontWeight: FontWeight.bold,
-                                          fontSize: 26,
-                                          fontStyle: FontStyle.normal,
-                                          backgroundColor: Colors.redAccent,
-                                          letterSpacing: 2.0)),
                                 ]),
                           ],
                         ),
-                        SizedBox(height: 20),
-                        Container(
-                          margin: EdgeInsets.all(3),
-                          child: Table(
+                        SizedBox(height: 10),
+                      Card(
+                        elevation: 5,
+                        child: Padding(
+                          padding: EdgeInsets.all(10),
+                          child: Padding(
+                            padding: const EdgeInsets.only(left: 3, top: 5),
+                            child: Table(
                             // columnWidths: ,
                             border: TableBorder(
                               bottom: BorderSide(
@@ -1361,29 +1731,23 @@ class _DibrTodayPageState extends State<DibrTodayPage> {
                                 width: 1.0,
                               ),
                               left: BorderSide(
-                                color: Colors.white54,
-                                style: BorderStyle.solid,
-                                width: 1.0,
+                                style: BorderStyle.none,
                               ),
                               right: BorderSide(
-                                color: Colors.white54,
-                                style: BorderStyle.solid,
-                                width: 1.0,
+                                style: BorderStyle.none,
                               ),
                               top: BorderSide(
-                                color: Colors.white54,
-                                style: BorderStyle.solid,
-                                width: 1.0,
+                                style: BorderStyle.none,
                               ),
                               verticalInside: BorderSide(
                                 style: BorderStyle.none,
                               ),
                             ),
                             columnWidths: {
-                              0: FractionColumnWidth(.20),
-                              1: FractionColumnWidth(.25),
+                              0: FractionColumnWidth(.22),
+                              1: FractionColumnWidth(.28),
                               2: FractionColumnWidth(.30),
-                              3: FractionColumnWidth(.25)
+                              3: FractionColumnWidth(.20)
                             },
                             children: [
                               TableRow(children: [
@@ -1463,7 +1827,7 @@ class _DibrTodayPageState extends State<DibrTodayPage> {
                                     mainAxisAlignment: MainAxisAlignment.end,
                                     children: [
                                       Icon(
-                                        getIcon(snapshot.data.buyRate1st),
+                                        getUpDownIcon(snapshot.data.buyRate1st),
                                         size: 25,
                                         color:
                                             getColor(snapshot.data.buyRate1st),
@@ -1478,7 +1842,7 @@ class _DibrTodayPageState extends State<DibrTodayPage> {
                                     mainAxisAlignment: MainAxisAlignment.end,
                                     children: [
                                       Icon(
-                                        getIcon(snapshot.data.minusDecide1st),
+                                        getUpDownIcon(snapshot.data.minusDecide1st),
                                         size: 25,
                                         color: getColor(
                                             snapshot.data.minusDecide1st),
@@ -1513,7 +1877,7 @@ class _DibrTodayPageState extends State<DibrTodayPage> {
                                     mainAxisAlignment: MainAxisAlignment.end,
                                     children: [
                                       Icon(
-                                        getIcon(snapshot.data.buyRate2nd),
+                                        getUpDownIcon(snapshot.data.buyRate2nd),
                                         size: 25,
                                         color:
                                             getColor(snapshot.data.buyRate2nd),
@@ -1528,7 +1892,7 @@ class _DibrTodayPageState extends State<DibrTodayPage> {
                                     mainAxisAlignment: MainAxisAlignment.end,
                                     children: [
                                       Icon(
-                                        getIcon(snapshot.data.minusDecide2nd),
+                                        getUpDownIcon(snapshot.data.minusDecide2nd),
                                         size: 25,
                                         color: getColor(
                                             snapshot.data.minusDecide2nd),
@@ -1541,7 +1905,7 @@ class _DibrTodayPageState extends State<DibrTodayPage> {
                                     ]),
                               ]),
                             ],
-                          ),
+                          ),)),
                         ),
                         SizedBox(height: 5),
                         Align(
@@ -1554,356 +1918,6 @@ class _DibrTodayPageState extends State<DibrTodayPage> {
                                   color: Colors.red,
                                   letterSpacing: 2.0,
                                 ))),
-                        SizedBox(height: 10),
-                        Container(
-                            padding: EdgeInsets.fromLTRB(2, 2, 2, 0),
-                            height: 300,
-                            width: 420,
-                            child: Card(
-                          elevation: 5,
-                          child: Padding(
-                            padding: EdgeInsets.all(2),
-                            child: Padding(
-                              padding: const EdgeInsets.only(
-                                  left: 3, top: 5),
-                              child: Table(
-                          // columnWidths: ,
-                          border: TableBorder(
-                            bottom: BorderSide(
-                              color: Colors.blueGrey,
-                              style: BorderStyle.solid,
-                              width: 1.0,
-                            ),
-                            horizontalInside: BorderSide(
-                              color: Colors.white,
-                              style: BorderStyle.solid,
-                              width: 1.0,
-                            ),
-                            left: BorderSide(
-                              style: BorderStyle.none,
-                            ),
-                            right: BorderSide(
-                              style: BorderStyle.none,
-                            ),
-                            top: BorderSide(
-                              style: BorderStyle.none,
-                            ),
-                            verticalInside: BorderSide(
-                              style: BorderStyle.none,
-                            ),
-                          ),
-                          columnWidths: {
-                            0: FractionColumnWidth(.35),
-                            1: FractionColumnWidth(.35),
-                            2: FractionColumnWidth(.3)
-                          },
-                          children: [
-                            TableRow(children: [
-                              Row(
-                                  mainAxisAlignment: MainAxisAlignment.start,
-                                  children: [
-                                    Icon(
-                                      Icons.score,
-                                      size: iconSize,
-                                      color: Colors.blue,
-                                    ),
-                                    Text('Market',
-                                        style: TextStyle(
-                                            fontWeight: FontWeight.bold,
-                                            color: Colors.green)),
-                                  ]),
-                              Row(
-                                  mainAxisAlignment: MainAxisAlignment.end,
-                                  children: [
-                                    Icon(
-                                      Icons.attach_money,
-                                      size: iconSize,
-                                      color: Colors.redAccent,
-                                    ),
-                                    Text('Price',
-                                        style: TextStyle(
-                                            fontWeight: FontWeight.bold,
-                                            color: Colors.green)),
-                                  ]),
-                              Row(
-                                  mainAxisAlignment: MainAxisAlignment.end,
-                                  children: [
-                                    Icon(
-                                      Icons.grade,
-                                      size: iconSize,
-                                      color: Colors.greenAccent,
-                                    ),
-                                    Text('Score',
-                                        style: TextStyle(
-                                            fontWeight: FontWeight.bold,
-                                            color: Colors.green)),
-                                  ]),
-                            ]),
-                            TableRow(children: [
-                              Row(
-                                  mainAxisAlignment: MainAxisAlignment.start,
-                                  children: [
-                                    Image.asset(
-                                      'images/usa.png',
-                                      width: 40,
-                                      height: 40,
-                                    ),
-                                    Text('S&P500')
-                                  ]),
-                              Column(
-                                  crossAxisAlignment: CrossAxisAlignment.end,
-                                  children: [
-                                    Text(
-                                      '${snapshot.data.snpEndPrice} ',
-                                      textAlign: TextAlign.end,
-                                      style: TextStyle(
-                                          fontWeight: FontWeight.bold,
-                                          color: Colors.black),
-                                    ),
-                                    Text(
-                                        '${snapshot.data.snpUdRateRealByClose}%[${snapshot.data.snpUdPrice}] ',
-                                        textAlign: TextAlign.end,
-                                        style: TextStyle(
-                                            color: getColor(snapshot
-                                                .data.snpUdRateRealByClose))),
-                                  ]),
-                              Row(
-                                  mainAxisAlignment: MainAxisAlignment.end,
-                                  children: [
-                                    Icon(
-                                      getIcon(snapshot.data.snpScore),
-                                      size: 35,
-                                      color: getColor(snapshot.data.snpScore),
-                                    ),
-                                    Text('${snapshot.data.snpScore} ',
-                                        textAlign: TextAlign.end,
-                                        style: TextStyle(
-                                            color: getColor(
-                                                snapshot.data.snpScore))),
-                                  ]),
-                            ]),
-                            TableRow(children: [
-                              Row(
-                                  mainAxisAlignment: MainAxisAlignment.start,
-                                  children: [
-                                    Image.asset(
-                                      'images/euro.png',
-                                      width: 40,
-                                      height: 40,
-                                    ),
-                                    Text('EURO')
-                                  ]),
-                              Column(
-                                  crossAxisAlignment: CrossAxisAlignment.end,
-                                  children: [
-                                    Text(
-                                      '${snapshot.data.eurEndPrice} ',
-                                      textAlign: TextAlign.end,
-                                      style: TextStyle(
-                                          fontWeight: FontWeight.bold,
-                                          color: Colors.black),
-                                    ),
-                                    Text(
-                                        '${snapshot.data.eurUdRateRealByClose}%[${snapshot.data.eurUdPrice}] ',
-                                        textAlign: TextAlign.end,
-                                        style: TextStyle(
-                                            color: getColor(snapshot
-                                                .data.eurUdRateRealByClose))),
-                                  ]),
-                              Row(
-                                  mainAxisAlignment: MainAxisAlignment.end,
-                                  children: [
-                                    Icon(
-                                      getIcon(snapshot.data.eurScore),
-                                      size: 35,
-                                      color: getColor(snapshot.data.eurScore),
-                                    ),
-                                    Text('${snapshot.data.eurScore} ',
-                                        textAlign: TextAlign.end,
-                                        style: TextStyle(
-                                            color: getColor(
-                                                snapshot.data.eurScore))),
-                                  ]),
-                            ]),
-                            TableRow(children: [
-                              Row(
-                                  mainAxisAlignment: MainAxisAlignment.start,
-                                  children: [
-                                    Image.asset(
-                                      'images/oil.png',
-                                      width: 40,
-                                      height: 40,
-                                    ),
-                                    Text('WTI OIL')
-                                  ]),
-                              Column(
-                                  crossAxisAlignment: CrossAxisAlignment.end,
-                                  children: [
-                                    Text(
-                                      '${snapshot.data.wtiEndPrice} ',
-                                      textAlign: TextAlign.end,
-                                      style: TextStyle(
-                                          fontWeight: FontWeight.bold,
-                                          color: Colors.black),
-                                    ),
-                                    Text(
-                                        '${snapshot.data.wtiUdRateRealByClose}%[${snapshot.data.wtiUdPrice}] ',
-                                        textAlign: TextAlign.end,
-                                        style: TextStyle(
-                                            color: getColor(snapshot
-                                                .data.wtiUdRateRealByClose))),
-                                  ]),
-                              Row(
-                                  mainAxisAlignment: MainAxisAlignment.end,
-                                  children: [
-                                    Icon(
-                                      getIcon(snapshot.data.wtiScore),
-                                      size: 35,
-                                      color: getColor(snapshot.data.wtiScore),
-                                    ),
-                                    Text('${snapshot.data.wtiScore} ',
-                                        textAlign: TextAlign.end,
-                                        style: TextStyle(
-                                            color: getColor(
-                                                snapshot.data.wtiScore))),
-                                  ]),
-                            ]),
-                            TableRow(children: [
-                              Row(
-                                  mainAxisAlignment: MainAxisAlignment.start,
-                                  children: [
-                                    Image.asset(
-                                      'images/oil.png',
-                                      width: 40,
-                                      height: 40,
-                                    ),
-                                    Text('DUB OIL')
-                                  ]),
-                              Column(
-                                  crossAxisAlignment: CrossAxisAlignment.end,
-                                  children: [
-                                    Text(
-                                      '${snapshot.data.dubEndPrice} ',
-                                      textAlign: TextAlign.end,
-                                      style: TextStyle(
-                                          fontWeight: FontWeight.bold,
-                                          color: Colors.black),
-                                    ),
-                                    Text(
-                                        '${snapshot.data.dubUdRateRealByClose}%[${snapshot.data.dubUdPrice}] ',
-                                        textAlign: TextAlign.end,
-                                        style: TextStyle(
-                                            color: getColor(snapshot
-                                                .data.dubUdRateRealByClose))),
-                                  ]),
-                              Row(
-                                  mainAxisAlignment: MainAxisAlignment.end,
-                                  children: [
-                                    Icon(
-                                      getIcon(snapshot.data.dubScore),
-                                      size: 35,
-                                      color: getColor(snapshot.data.dubScore),
-                                    ),
-                                    Text('${snapshot.data.dubScore} ',
-                                        textAlign: TextAlign.end,
-                                        style: TextStyle(
-                                            color: getColor(
-                                                snapshot.data.dubScore))),
-                                  ]),
-                            ]),
-                            TableRow(children: [
-                              Row(
-                                  mainAxisAlignment: MainAxisAlignment.start,
-                                  children: [
-                                    Image.asset(
-                                      'images/oil.png',
-                                      width: 40,
-                                      height: 40,
-                                    ),
-                                    Text('BRE OIL')
-                                  ]),
-                              Column(
-                                  crossAxisAlignment: CrossAxisAlignment.end,
-                                  children: [
-                                    Text(
-                                      '${snapshot.data.breEndPrice} ',
-                                      textAlign: TextAlign.end,
-                                      style: TextStyle(
-                                          fontWeight: FontWeight.bold,
-                                          color: Colors.black),
-                                    ),
-                                    Text(
-                                        '${snapshot.data.breUdRateRealByClose}%[${snapshot.data.breUdPrice}] ',
-                                        textAlign: TextAlign.end,
-                                        style: TextStyle(
-                                            color: getColor(snapshot
-                                                .data.breUdRateRealByClose))),
-                                  ]),
-                              Row(
-                                  mainAxisAlignment: MainAxisAlignment.end,
-                                  children: [
-                                    Icon(
-                                      getIcon(snapshot.data.breScore),
-                                      size: 35,
-                                      color: getColor(snapshot.data.breScore),
-                                    ),
-                                    Text('${snapshot.data.breScore} ',
-                                        textAlign: TextAlign.end,
-                                        style: TextStyle(
-                                            color: getColor(
-                                                snapshot.data.breScore))),
-                                  ]),
-                            ]),
-                            TableRow(children: [
-                              Row(
-                                  mainAxisAlignment: MainAxisAlignment.start,
-                                  children: [
-                                    Image.asset(
-                                      'images/exc.png',
-                                      width: 40,
-                                      height: 40,
-                                    ),
-                                    Text('   ＄/￦')
-                                  ]),
-                              Column(
-                                  crossAxisAlignment: CrossAxisAlignment.end,
-                                  children: [
-                                    Text(
-                                      '${snapshot.data.tdOpRate} ',
-                                      textAlign: TextAlign.end,
-                                      style: TextStyle(
-                                          fontWeight: FontWeight.bold,
-                                          color: Colors.black),
-                                    ),
-                                    Text(
-                                        '${snapshot.data.excDiffRate}%[${snapshot.data.excDiffPrice}] ',
-                                        textAlign: TextAlign.end,
-                                        style: TextStyle(
-                                            color: getColor(
-                                                snapshot.data.excDiffRate))),
-                                  ]),
-                              Row(
-                                  mainAxisAlignment: MainAxisAlignment.end,
-                                  children: [
-                                    Icon(
-                                      getIcon(snapshot.data.excScore1st),
-                                      size: 35,
-                                      color:
-                                          getColor(snapshot.data.excScore1st),
-                                    ),
-                                    Text('${snapshot.data.excScore1st} ',
-                                        textAlign: TextAlign.end,
-                                        style: TextStyle(
-                                            color: getColor(
-                                                snapshot.data.excScore1st))),
-                                  ]),
-                            ]),
-                          ],
-                        ),
-                            )
-                            )
-                          )
-                            ),
                         SizedBox(height: 50),
                         SizedBox(
                             height: 60,
