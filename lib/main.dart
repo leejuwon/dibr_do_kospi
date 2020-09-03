@@ -96,7 +96,10 @@ class _MyAppState extends State<MyApp> {
       ),
 
       home: Container(
-        child: OpenScreen(),
+        child: Padding(
+         child: OpenScreen(),
+         padding: new EdgeInsets.only(bottom:48.0),
+        ),
       ),
       debugShowCheckedModeBanner: false,
     );
