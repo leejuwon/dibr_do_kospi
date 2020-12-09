@@ -9,6 +9,7 @@ import "package:flutter_dibr_do_kospi/ad_manager.dart";
 import 'package:firebase_admob/firebase_admob.dart';
 import "package:flutter_dibr_do_kospi/screen/open_screen.dart";
 import 'package:google_fonts/google_fonts.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
 //import 'package:intl/intl.dart';
 
 final investImgItems = [
@@ -85,14 +86,18 @@ class _MyAppState extends State<MyApp> {
   Widget build(BuildContext context) {
     final textTheme = Theme.of(context).textTheme;
     return MaterialApp(
+      localizationsDelegates: [
+        GlobalMaterialLocalizations.delegate,
+        GlobalWidgetsLocalizations.delegate,
+      ],
+      supportedLocales: [
+        const Locale('ko', 'KR'),
+      ],
       title: "Do Kospi",
       theme: ThemeData(
           brightness: Brightness.light,
           primaryColor: Colors.lime,
-          accentColor: Colors.blue,
-          textTheme: GoogleFonts.mcLarenTextTheme(
-            Theme.of(context).textTheme,
-          ),
+          accentColor: Colors.blue
       ),
 
       home: Container(
@@ -222,7 +227,7 @@ class _ExpandableListViewSingleState extends State<ExpandableListViewSingle> {
       child: new Column(
         children: <Widget>[
           new Container(
-            color: Colors.white,
+            color: Colors.grey,
             padding: new EdgeInsets.symmetric(horizontal: 1.0),
             child: new Row(
               mainAxisAlignment: MainAxisAlignment.start,

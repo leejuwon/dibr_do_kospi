@@ -26,10 +26,13 @@ dependencies:
   http: ^0.12.0+1
   permission_handler: ^5.0.0+hotfix.9
   carousel_slider: ^2.2.1
-  intl: ^0.15.8
+  intl: ^0.16.0
   firebase_admob: ^0.9.3
   mockito: ^4.1.1
   google_fonts: ^1.1.0
+  flutter_localizations:
+    sdk: flutter
+
 
 
 
@@ -102,6 +105,15 @@ flutter:
     - images/inverse_logo.png
     - images/leverage_logo_2.png
     - images/inverse_logo_2.png
+    - images/frontImg.jpeg
+    - images/todayBg.jpg
+    - images/banner_orange.png
+    - images/banner_red.png
+    - images/logo_orange.png
+    - images/logo_result_blue.png
+    - images/logo_result_green.png
+    - images/logo_red.png
+    - images/logo_transparent.png
     - google_fonts/
 
 
